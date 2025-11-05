@@ -1,0 +1,18 @@
+# Auxilary files of latex build
+*.aux
+*.fls
+*.out
+*.lof
+*.log
+*.lot
+*.synctex.gz
+*.toc
+*.fdb_latexmk
+*.bbl
+*.bcf
+*.blg
+*.xml
+*.pdf
+
+#vscode workspace
+*.code-workspace

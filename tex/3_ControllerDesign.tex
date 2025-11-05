@@ -1,0 +1,71 @@
+\chapter{Controller Design}
+\section{Controller Structure}
+\section{Current Controller}
+The internal PI current controller's are popular in the industrial application for the reasons it is easy to implement and has low computational burden
+which is a nesseccity for high bandwidth systems like the active rectifier.\par
+The mathematical model developed in equation \ref{eq:state_space_dq_positive} and \ref{eq:state_space_dq_negative} describes the dynamics of the system
+and serves as the basis for the d and q current controller design. The $\omega L$ term presents a coupling effect between the d and q axes, which must
+be considered in the controller design.\par
+\begin{figure}[ht]
+\centering
+\includegraphics[scale = 0.45]{img/decoupledController.png}
+\caption{Diagram of decoupled current controller}
+\label{fig:decoupledController}
+\end{figure}
+\subsection{Cross Coupling cancellation}
+To design a PI controller for the current control loop, the cross coupling terms must be cancelled out. This is done by adding a feed forward term to the
+controller as shown in figure \ref{fig:decoupledController}. The control variable $\mathcal{V}_{d}$ and $\mathcal{V}_{q}$ are defined as in equations
+\ref{eq:control_positive} and \ref{eq:control_negative}, the system can be decoupled and the cross coupling terms are cancelled out.
+\begin{equation}
+    \begin{split}
+        \mathcal{V}_{d}^{p}    &= -\mathcal{U}_{d}^{p} + e_{d}^{p} + \omega L i_{q}^{p} \\
+        \mathcal{V}_{q}^{p}    &= -\mathcal{U}_{q}^{p} + e_{q}^{p} - \omega L i_{d}^{p}
+    \end{split}
+    \label{eq:control_positive}
+\end{equation}
+\begin{equation}
+    \begin{split}
+        \mathcal{V}_{d}^{n}    &= -\mathcal{U}_{d}^{n} + e_{d}^{n} - \omega L i_{q}^{n} \\
+        \mathcal{V}_{q}^{n}    &= -\mathcal{U}_{q}^{n} + e_{q}^{n} + \omega L i_{d}^{n}
+    \end{split}
+    \label{eq:control_negative}
+\end{equation}
+where $\mathcal{U}_{d}$ and $\mathcal{U}_{q}$ are the new control variables for the decoupled system. The system can now be represented as in equations
+\ref{eq:decoupled_positive} and \ref{eq:decoupled_negative}:
+\begin{equation}
+    \begin{split}
+        L \frac{di_{d}^{p}}{dt} &= -R i_{d}^{p} +  \mathcal{U}_{d}^{p}\\
+        L \frac{di_{q}^{p}}{dt} &= -R i_{q}^{p} +  \mathcal{U}_{q}^{p}
+    \end{split}
+    \label{eq:decoupled_positive}
+\end{equation}
+\begin{equation}
+    \begin{split}
+        L \frac{di_{d}^{n}}{dt} &= -R i_{d}^{n} +  \mathcal{U}_{d}^{n}\\
+        L \frac{di_{q}^{n}}{dt} &= -R i_{q}^{n} +  \mathcal{U}_{q}^{n}
+    \end{split}
+    \label{eq:decoupled_negative}
+\end{equation}
+The Laplace transform of the decoupled system $G(s)$ is given in equations \ref{eq:decoupled_laplace}:
+\begin{equation}
+    G(s) = \frac{I(s)}{U(s)} = \frac{1}{Ls + R}
+    \label{eq:decoupled_laplace}
+\end{equation}
+\subsection{PI Current Controller Design}
+The PI current controller is designed based on decoupled differential equation in equation \ref{eq:decoupled_laplace}.
+Let's define an auxiliary control variable $\mathcal{U}_{d}$ and $\mathcal{U}_{q}$ as in equations \ref{eq:aux_control_positive} and \ref{eq:aux_control_negative}:
+\begin{equation}
+    \begin{split}
+        \mathcal{U}_{d}^{p}    &= (i_{dref}^{p} - i_{d}^{p}) (k_{p} + \frac{k_{i}}{s})\\
+        \mathcal{U}_{q}^{p}    &= (i_{qref}^{p} - i_{q}^{p}) (k_{p} + \frac{k_{i}}{s})
+    \end{split}
+    \label{eq:aux_control_positive}
+\end{equation}
+\begin{equation}
+    \begin{split}
+        \mathcal{U}_{d}^{n}    &= (i_{dref}^{n} - i_{d}^{n}) (k_{p} + \frac{k_{i}}{s}) \\
+        \mathcal{U}_{q}^{n}    &= (i_{qref}^{n} - i_{q}^{n}) (k_{p} + \frac{k_{i}}{s})
+    \end{split}
+    \label{eq:aux_control_negative}
+\end{equation}
+\section{DC Voltage Controller}
