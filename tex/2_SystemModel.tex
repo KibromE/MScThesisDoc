@@ -1,4 +1,4 @@
-\chapter{System Model}
+\chapter{System Model}\label{ch:SystemModel}
 \section{Background}
 \section{Mathematical model of VSR}
 The voltage equations for the 3-phase system shown in [\ref{fig:topology}] can be written as:
@@ -37,7 +37,7 @@ Incase of unbalanced grid conditions, the symmetrical sequence decomposition is 
 the system as shown in figure[\ref{fig:symmetricalDecomposition}]. The three-phase parameters can
 be decomposed into positive, negative, and zero sequence components represented by equation[\ref{eq:symmetrical_component}].
 Since the neutral point of the system is not connected to the ground, the zero sequence component is not present in the system.
-The derivation and Implementation of the symmetrical sequence decomposition is given in appendix A.
+The derivation and Implementation of the symmetrical sequence decomposition is given in appendix \ref{App:SymmetricalComponents}.
 \begin{equation}
     \begin{gathered}
         X_{abc} = X^{p}_{abc} + X^{n}_{abc} + X^{0}_{abc}
@@ -46,7 +46,7 @@ The derivation and Implementation of the symmetrical sequence decomposition is g
 \end{equation}
 where $X_{abc}$ is the three-phase parameter, $X^{p}_{abc}, X^{n}_{abc}, X^{0}_{abc}$ are the positive, negative,
 and zero sequence components respectively.\par
-Thus the space vector of the unbalanced system can be transformed using the Clarke transformation as given in appendix B
+Thus the space vector of the unbalanced system can be transformed using the Clarke transformation as given in appendix \ref{App:ClarkParkTransformation}
 to $\alpha\beta$ coordinates as space vector sum of the positive $X_{\alpha\beta}$ and negative $X_{\alpha\beta}$ sequence components.
 The model of the system in equation[\ref{eq:alpha_beta_model}] can be expressed in $\alpha\beta$ coordinates as follows:\par
 \begin{equation}
@@ -142,7 +142,8 @@ The mathematical model of the system can be expressed in state space form in $\a
 where $\mathcal{V}^{p}_{\alpha}, \mathcal{V}^{p}_{\beta}$ are the modulation signals for the positive sequence component
  and $\mathcal{V}^{n}_{\alpha}, \mathcal{V}^{n}_{\beta}$ are the modulation signals for the negative sequence component.\par
 Since both the positive and negative sequence components are decoupled, the system can be transformed into synchronous 
-rotating frame using the Park transformation as given in appendix B. The system can be represented in the synchronous d-q frame as follows:
+rotating frame using the Park transformation as given in appendix \ref{App:ClarkParkTransformation}. The system can be 
+represented in the synchronous d-q frame as follows:
 \begin{equation}
     \begin{split}
         \frac{d}{dt}
