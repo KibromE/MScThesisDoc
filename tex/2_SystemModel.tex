@@ -239,20 +239,76 @@ input current.\par
 Under unbalanced grid conditions the input apparent power of the system can be expressed as
 follows:
 \begin{equation}
-    S(t) = E_a I_a + E_b I_b + E_c I_c = P(t) + jQ(t)
+    S(t) = e_a i_a + e_b i_b + e_c i_c = P(t) + jQ(t)
     \label{eq:apparent_power_equation}
 \end{equation}
 Applying the Clarke transformation to equation[\ref{eq:apparent_power_equation}] gives the apparent
 power in $\alpha\beta$ coordinates as:
 \begin{equation}
-    S(t) = \frac{3}{2}(E_{\alpha} + jE_{\beta})(i_{\alpha} + ji_{\beta})^{*}
+    S(t) = \frac{3}{2}(e_{\alpha} + je_{\beta})(i_{\alpha} + ji_{\beta})^{*}
+    \label{eq:apparent_power_alpha_beta}
 \end{equation}
 Based on the phasor diagram in figure[\ref{fig:symmetricalDecomposition}], the current vector $\vec{i_{s}}$ can be expressed as vector sum of
 $\alpha$ and $\beta$ component currents. Then by inverse Park transformation, $\vec{i_{s}}$ is expressed:
 \begin{equation}
     \begin{split}
-            \vec{i_{s}} &= i_{\alpha}^{p} + ji_{\beta}^{p} + i_{\alpha}^{n} + ji_{\beta}^{n} 
+            \vec{i_{s}} &= i_{\alpha} + ji_{\beta} = i_{\alpha}^{p} + ji_{\beta}^{p} + i_{\alpha}^{n} + ji_{\beta}^{n} \\
+            &= (i_{d}^{p} + ji_{q}^{p})e^{j\omega t} + (i_{d}^{n} + ji_{q}^{n})e^{-j\omega t}\\
+            &= i_{d}^{p} \cos(\omega t) - i_{q}^{p} \sin(\omega t) + j(i_{d}^{p} \sin(\omega t) + i_{q}^{p} \cos(\omega t))\\
+            &+ i_{d}^{n} \cos(\omega t) + i_{q}^{n} \sin(\omega t) + j(-i_{d}^{n} \sin(\omega t) + i_{q}^{n} \cos(\omega t))\\
+            &= i_{d}^{p} \cos(\omega t) - i_{q}^{p} \sin(\omega t) + i_{d}^{n} \cos(\omega t) + i_{q}^{n} \sin(\omega t)\\
+            &+ j(i_{d}^{p} \sin(\omega t) + i_{q}^{p} \cos(\omega t) - i_{d}^{n} \sin(\omega t) + i_{q}^{n} \cos(\omega t))
     \end{split}
+    \label{eq:current_phasor}
+\end{equation}
+Similarly, the grid voltage signal can be expressed in d-q coordinates as:
+\begin{equation}
+    \begin{split}
+            \vec{e_{s}} &= e_{\alpha} + je_{\beta} = e_{\alpha}^{p} + je_{\beta}^{p} + e_{\alpha}^{n} + je_{\beta}^{n} \\
+            &= (e_{d}^{p} + je_{q}^{p})e^{j\omega t} + (e_{d}^{n} + je_{q}^{n})e^{-j\omega t}\\
+            &= e_{d}^{p} \cos(\omega t) - e_{q}^{p} \sin(\omega t) + j(e_{d}^{p} \sin(\omega t) + e_{q}^{p} \cos(\omega t))\\
+            &+ e_{d}^{n} \cos(\omega t) + e_{q}^{n} \sin(\omega t) + j(-e_{d}^{n} \sin(\omega t) + e_{q}^{n} \cos(\omega t))\\
+            &= e_{d}^{p} \cos(\omega t) - e_{q}^{p} \sin(\omega t) + e_{d}^{n} \cos(\omega t) + e_{q}^{n} \sin(\omega t)\\
+            &+ j(e_{d}^{p} \sin(\omega t) + e_{q}^{p} cos(\omega t) - e_{d}^{n} \sin(\omega t) + e_{q}^{n} \cos(\omega t))
+    \end{split}
+    \label{eq:voltage_phasor}
+\end{equation}
+Substituting the subsequent equations[\ref{eq:current_phasor}] and [\ref{eq:voltage_phasor}] into equation[\ref{eq:apparent_power_alpha_beta}],
+the instantaneous active and reactive power can be expressed as:
+\begin{equation}
+    \begin{split}
+        S(t) &= \frac{3}{2}(e_{\alpha} + je_{\beta})(i_{\alpha} + ji_{\beta})^{*} \\
+        S(t) &= \frac{3}{2}\Big[ \big(e_{d}^{p}\cos(\omega t) - e_{q}^{p}\sin(\omega t) + e_{d}^{n}\cos(\omega t) + e_{q}^{n}\sin(\omega t)\big) \\
+            &\quad + j\big(e_{d}^{p}\sin(\omega t) + e_{q}^{p}\cos(\omega t) - e_{d}^{n}\sin(\omega t) + e_{q}^{n}\cos(\omega t)\big) \Big] \\
+            &\quad \times \Big[ \big(i_{d}^{p}\cos(\omega t) - i_{q}^{p}\sin(\omega t) + i_{d}^{n}\cos(\omega t) + i_{q}^{n}\sin(\omega t)\big) \\
+            &\quad - j\big(i_{d}^{p}\sin(\omega t) + i_{q}^{p}\cos(\omega t) - i_{d}^{n}\sin(\omega t) + i_{q}^{n}\cos(\omega t)\big)\Big]
+    \end{split}
+    \label{eq:apparent_power_dq}
+\end{equation}
+The simplified form of equation[\ref{eq:apparent_power_dq}] gives the instantaneous active power $P(t)$ and reactive power $Q(t)$ as follows:
+\begin{equation}
+    \begin{split}
+        P(t) &= P_0 + P_{c2}\cos(2\omega t) + P_{s2}\sin(2\omega t) \\
+        Q(t) &= Q_0 + Q_{c2}\cos(2\omega t) + Q_{s2}\sin(2\omega t)
+    \end{split}
+    \label{eq:instantaneous_power}
+\end{equation}
+where $P_0$ and $Q_0$ are the average active and reactive power components, $P_{c2}, P_{s2}, Q_{c2}, Q_{s2}$ are the coefficients of the
+second harmonic components of active and reactive power respectively are caused by the voltage unbalance.The real power delivered to the
+DC link and determines the dc voltage level. Hence, if $P(t)$ varies with
+time for $P_{c2}, P_{s2}$ not being equal to zero, the DC-link voltage fluctuates, i.e, 120Hz ripple appears. Therefore, to keep constant
+DC level, $P_{c2}, P_{s2}$ have to be nullified. Also the dc component reactive power $Q_0$ should be nullified to achieve unity power
+factor in average.\par
+\begin{equation}
+    \begin{split}
+        P_0 &= \frac{3}{2}(e_{d}^{p} i_{d}^{p} + e_{q}^{p} i_{q}^{p} + e_{d}^{n} i_{d}^{n} + e_{q}^{n} i_{q}^{n}) \\
+        P_{c2} &= \frac{3}{2}(e_{d}^{p} i_{d}^{n} + e_{q}^{p} i_{q}^{n} + e_{d}^{n} i_{d}^{p} + e_{q}^{n} i_{q}^{p}) \\
+        P_{s2} &= \frac{3}{2}(e_{q}^{n} i_{d}^{p} - e_{d}^{n} i_{q}^{p} - e_{q}^{p} i_{d}^{n} + e_{d}^{p} i_{q}^{n}) \\
+        Q_0 &= \frac{3}{2}(e_{q}^{p} i_{d}^{p} - e_{d}^{p} i_{q}^{p} + e_{q}^{n} i_{d}^{n} - e_{d}^{n} i_{q}^{n}) \\
+        Q_{c2} &= \frac{3}{2}(e_{q}^{p} i_{d}^{n} - e_{d}^{p} i_{q}^{n} + e_{q}^{n} i_{d}^{p} - e_{d}^{n} i_{q}^{p}) \\
+        Q_{s2} &= \frac{3}{2}(e_{d}^{p} i_{d}^{n} + e_{q}^{p} i_{q}^{n} - e_{d}^{n} i_{d}^{p} - e_{q}^{n} i_{q}^{p})
+    \end{split}
+    \label{eq:power_coefficients}
 \end{equation}
 \section{Space vector modulation}
 \section{Model predictive control}
