@@ -1,10 +1,13 @@
 \chapter{Controller Design}\label{ch:ControllerDesign}
 \section{Controller Structure}
 \section{Current Controller}
-The internal PI current controller's are popular in the industrial application for the reasons it is easy to implement and has low computational burden
+The internal PI current controller's are popular in the industrial application for the reasons,
+that it is easy to implement and has low computational burden
 which is a nesseccity for high bandwidth systems like the active rectifier.\par
-The mathematical model developed in equation \ref{eq:state_space_dq_positive} and \ref{eq:state_space_dq_negative} describes the dynamics of the system
-and serves as the basis for the d and q current controller design. The $\omega L$ term presents a coupling effect between the d and q axes, which must
+The mathematical model developed in equation [\ref{eq:state_space_dq_positive}] 
+and [\ref{eq:state_space_dq_negative}] describes the dynamics of the system
+and serves as the basis for the d and q current controller design. The $\omega L$ 
+term presents a coupling effect between the d and q axes, which must
 be considered in the controller design.\par
 \begin{figure}[ht]
 \centering
@@ -13,9 +16,10 @@ be considered in the controller design.\par
 \label{fig:decoupledController}
 \end{figure}
 \subsection{Cross Coupling cancellation}
-To design a PI controller for the current control loop, the cross coupling terms must be cancelled out. This is done by adding a feed forward term to the
-controller as shown in figure \ref{fig:decoupledController}. The control variable $\mathcal{V}_{d}$ and $\mathcal{V}_{q}$ are defined as in equations
-\ref{eq:control_positive} and \ref{eq:control_negative}, the system can be decoupled and the cross coupling terms are cancelled out.
+To design a PI controller for the current control loop, the cross coupling terms must be cancelled out.
+This is done by adding a feed forward term to the controller as shown in figure [\ref{fig:decoupledController}].
+The control variable $\mathcal{V}_{d}$ and $\mathcal{V}_{q}$ are defined as in equations[\ref{eq:control_positive}]
+and [\ref{eq:control_negative}], the system can be decoupled and the cross coupling terms are cancelled out.
 \begin{equation}
     \begin{split}
         \mathcal{V}_{d}^{p}    &= -\mathcal{U}_{d}^{p} + e_{d}^{p} + \omega L i_{q}^{p} \\
@@ -30,8 +34,8 @@ controller as shown in figure \ref{fig:decoupledController}. The control variabl
     \end{split}
     \label{eq:control_negative}
 \end{equation}
-where $\mathcal{U}_{d}$ and $\mathcal{U}_{q}$ are the new control variables for the decoupled system. The system can now be represented as in equations
-\ref{eq:decoupled_positive} and \ref{eq:decoupled_negative}:
+where $\mathcal{U}_{d}$ and $\mathcal{U}_{q}$ are the new control variables for the decoupled system. 
+The system can now be represented as in equations [\ref{eq:decoupled_positive}] and [\ref{eq:decoupled_negative}]:
 \begin{equation}
     \begin{split}
         L \frac{di_{d}^{p}}{dt} &= -R i_{d}^{p} +  \mathcal{U}_{d}^{p}\\
@@ -46,14 +50,15 @@ where $\mathcal{U}_{d}$ and $\mathcal{U}_{q}$ are the new control variables for 
     \end{split}
     \label{eq:decoupled_negative}
 \end{equation}
-The Laplace transform of the decoupled system $G(s)$ is given in equations \ref{eq:decoupled_laplace}:
+The Laplace transform of the decoupled system $G(s)$ is given in equations [\ref{eq:decoupled_laplace}]:
 \begin{equation}
     G(s) = \frac{I(s)}{U(s)} = \frac{1}{Ls + R}
     \label{eq:decoupled_laplace}
 \end{equation}
 \subsection{PI Current Controller Design}
-The PI current controller is designed based on decoupled differential equation in equation \ref{eq:decoupled_laplace}.
-Let's define an auxiliary control variable $\mathcal{U}_{d}$ and $\mathcal{U}_{q}$ as in equations \ref{eq:aux_control_positive} and \ref{eq:aux_control_negative}:
+The PI current controller is designed based on decoupled differential equation in equation [\ref{eq:decoupled_laplace}].
+Let's define an auxiliary control variable $\mathcal{U}_{d}$ and $\mathcal{U}_{q}$ as in equations 
+[\ref{eq:aux_control_positive}] and [\ref{eq:aux_control_negative}]:
 \begin{equation}
     \begin{split}
         \mathcal{U}_{d}^{p}    &= (i_{dref}^{p} - i_{d}^{p}) (k_{p} + \frac{k_{i}}{s})\\
@@ -67,5 +72,78 @@ Let's define an auxiliary control variable $\mathcal{U}_{d}$ and $\mathcal{U}_{q
         \mathcal{U}_{q}^{n}    &= (i_{qref}^{n} - i_{q}^{n}) (k_{p} + \frac{k_{i}}{s})
     \end{split}
     \label{eq:aux_control_negative}
+\end{equation}
+where $k_{p}$ and $k_{i}$ are the proportional and integral gains of the PI controller respectively.\par
+The closed loop transfer function of the system can be derived as in equation [\ref{eq:closed_loop_transfer_function}]:
+\begin{equation}
+    \frac{I(s)}{I_{ref}(s)} = \frac{(k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}}{1 + (k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}} 
+    = \frac{k_{p} s + k_{i}}{L s^{2} + (R + k_{p}) s + k_{i}}
+    \label{eq:closed_loop_transfer_function}
+\end{equation}
+To achieve a desired closed loop performance, among the various tuning methods, Internal Model Control (IMC)
+has been used for PI controller tuning for past decades in systems where an approximate model is available.
+This technique allows for adequate tracking and excels in disturbance rejection\cite{Shamsuzzoha2012, artIMCPIDShah}.
+The imperfect model should be incorporated as part of the controller design using an explicit model of the plant 
+\cite{Shamsuzzoha2012}. This tuning provides robustness to the controller, with the control loop remaining stable
+even if the parameters change substantially from those used for tuning. This is an interesting feature for the real
+implementation of the VSC.\par
+The primary disadvantage of IMC PI tuning is that it sets the PI integral part to be equal to
+the process time constant. Therefore, if the process had a long time constant, the controller
+would have an equally long integral time, resulting in slow recovery from process disturbances.
+However, for the VSC application, the process time constant is fast enough that it does not
+interfere with the desired controller behavior.\par
+The IMC tuning rules for a first order system $P(s)$ is given in equations [\ref{eq:IMC_tuning_kp}] and [\ref{eq:IMC_tuning_ki}]:
+\begin{equation}
+    P(s) = \frac{K}{\tau s + 1}
+    \label{eq:first_order_system}
+\end{equation}
+\begin{equation}
+    k_{p} = \frac{\tau}{K \tau_c}
+    \label{eq:IMC_tuning_kp}
+\end{equation}
+\begin{equation}
+    k_{i} = \frac{k_p}{\tau}
+    \label{eq:IMC_tuning_ki}
+\end{equation}
+where $\tau_c$ is the desired closed loop time constant and $\tau$ is the process time constant.\par
+A smaller $\tau_c$ results in a faster response but reduces the robustness of the controller.
+Conversely, a larger $\tau_c$ increases robustness but slows down the response.\par
+Thus, to design the PI current controller using IMC tuning rules, the process gain $K$ and time constant $\tau$
+must be identified from the decoupled transfer function in equation [\ref{eq:decoupled_laplace}]:
+\begin{equation}
+    P(s) = G(s) = \frac{K}{\tau s + 1}= \frac{\frac{1}{R}}{\frac{L}{R}s + 1}
+    \label{eq:transfer_function_identification}
+\end{equation}
+From equation [\ref{eq:transfer_function_identification}], the process gain $K$ and time constant $\tau$ are identified as:
+\begin{equation}
+    K = \frac{1}{R}, \quad \tau = \frac{L}{R}
+    \label{eq:process_parameters}
+\end{equation}
+From equations [\ref{eq:IMC_tuning_kp}], [\ref{eq:IMC_tuning_ki}] and [\ref{eq:process_parameters}], the PI controller gains
+can be derived as:
+\begin{equation}
+    k_{p} = \frac{L}{\tau_c}
+    \label{eq:final_kp}
+\end{equation}
+\begin{equation}
+    k_{i} = \frac{R}{\tau_c}
+    \label{eq:final_ki}
+\end{equation}
+Once the PI controller gains are determined, they can be implemented in the closed loop transfer function 
+[\ref{eq:final_closed_loop_transfer_function}] to analyze the system performance.obtained from equation 
+[\ref{eq:closed_loop_transfer_function}] to analyze the system performance.
+\begin{equation}
+    \begin{split}
+    \frac{I(s)}{I_{ref}(s)} &=  \frac{(k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}}{1 + (k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}} \\
+    \frac{I(s)}{I_{ref}(s)} &= \frac{1}{\tau_c s + 1}
+    \end{split}
+    \label{eq:final_closed_loop_transfer_function}
+\end{equation}
+The bandwidth of the current controller is chosen to be at least ten times smaller than the
+switching frequency of the inverter to ensure that the controller can respond quickly enough to
+changes in the reference current.
+\begin{equation}
+    \tau_c = \frac{10}{2 \pi f_{s}}
+    \label{eq:time_constant_bandwidth}
 \end{equation}
 \section{DC Voltage Controller}

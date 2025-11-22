@@ -18,16 +18,16 @@ transformations.\par
         1 & a & a^2
     \end{bmatrix}
     \begin{bmatrix}
-        X^P_a \\
-        X^N_a \\
+        X^p_a \\
+        X^n_a \\
         X^0_a
     \end{bmatrix}
     \label{eq:symmetrical_component_definition}
 \end{equation}
 \begin{equation}
     \begin{bmatrix}
-        X^P_a \\
-        X^N_a \\
+        X^p_a \\
+        X^n_a \\
         X^0_a
     \end{bmatrix}
     =
@@ -48,8 +48,8 @@ where \( a = e^{j2\pi/3} = \frac{-1}{2} + j\frac{\sqrt{3}}{2} \) is the operator
 that represents a 120-degree phase shift.\par
 From equation[\ref{eq:symmetrical_component_definition}] the symmetrical components 
 can be calculated from the three-phase components using the inverse transformation 
-of equation[\ref{eq:symmetrical_component_calculation}], and the \(X^{P,N}_b\) and \(X^{P,N}_c\)
-phases of the symmetrical components are derived by shifting the \(X^{P,N}_a\) phase by
+of equation[\ref{eq:symmetrical_component_calculation}], and the \(X^{p,n}_b\) and \(X^{p,n}_c\)
+phases of the symmetrical components are derived by shifting the \(X^{p,n}_a\) phase by
 120 and 240 degrees.\par
 To calculate the three phases of the symmetrical components, Lets assume a 
 three-phase system \( X_a \), \( X_b \), and \( X_c \), represented as
@@ -69,9 +69,9 @@ Then symmetrical components can be calculated using the following transformation
 \begin{equation}
     \begin{split}
     \begin{bmatrix}
-        X^P_a \\
-        X^P_b \\
-        X^P_c
+        X^p_a \\
+        X^p_b \\
+        X^p_c
     \end{bmatrix}
     =
     \frac{1}{3}
@@ -91,9 +91,9 @@ Then symmetrical components can be calculated using the following transformation
 \begin{equation}
     \begin{split}
     \begin{bmatrix}
-        X^N_a \\
-        X^N_b \\
-        X^N_c
+        X^n_a \\
+        X^n_b \\
+        X^n_c
     \end{bmatrix}
     =
     \frac{1}{3}
@@ -137,8 +137,8 @@ The implementation of the symmetrical components transformation in equations
 [\ref{eq:symmetrical_components_transformation_negative}], and
 [\ref{eq:symmetrical_components_transformation_zero}] can be summarized in the
 figure \ref{fig:Symmetrical_Components_Transformation_Block_Diagram}. where $T$
-is the period of the grid, used to generate $90^\circ$ phase shift. $A^P$, $A^N$
-and $A^Z$ are transformation matrix for positive,negative and zero sequence 
+is the period of the grid, used to generate $90^\circ$ phase shift. $A^p$, $A^n$
+and $A^0$ are transformation matrix for positive,negative and zero sequence 
 components respectively.\par
 \begin{figure}[H]
     \centering
