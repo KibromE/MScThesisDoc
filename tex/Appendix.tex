@@ -18,17 +18,17 @@ transformations.\par
         1 & a & a^2
     \end{bmatrix}
     \begin{bmatrix}
+        X^0_a \\
         X^p_a \\
-        X^n_a \\
-        X^0_a
+        X^n_a
     \end{bmatrix}
     \label{eq:symmetrical_component_definition}
 \end{equation}
 \begin{equation}
     \begin{bmatrix}
+        X^0_a \\
         X^p_a \\
-        X^n_a \\
-        X^0_a
+        X^n_a
     \end{bmatrix}
     =
     \frac{1}{3}
@@ -51,6 +51,14 @@ can be calculated from the three-phase components using the inverse transformati
 of equation[\ref{eq:symmetrical_component_calculation}], and the \(X^{p,n}_b\) and \(X^{p,n}_c\)
 phases of the symmetrical components are derived by shifting the \(X^{p,n}_a\) phase by
 120 and 240 degrees.\par
+\begin{equation}
+    \begin{split}
+        X^p_b &= a^2 \times X^p_a \\
+        X^p_c &= a \times X^p_a \\
+        X^n_b &= a \times X^n_a \\
+        X^n_c &= a^2 \times X^n_a
+    \end{split}
+\end{equation}
 To calculate the three phases of the symmetrical components, Lets assume a 
 three-phase system \( X_a \), \( X_b \), and \( X_c \), represented as
 \begin{equation}
