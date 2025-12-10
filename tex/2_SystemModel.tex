@@ -12,6 +12,17 @@ The voltage equations for the 3-phase system shown in [\ref{fig:topology}] can b
 \end{equation}
 where $e_{a}, e_{b}, e_{c}$ are the grid phase voltages, $i_a, i_b, i_c$ are the phase currents, $L$ is the input inductance,
 $R$ is the input resistance, $\mathcal{V}_a, \mathcal{V}_b, \mathcal{V}_c$ are the rectifier terminal phase voltages.\par
+The three phase voltages and currents can be represented as follows:
+\begin{equation}
+    \begin{split}
+        e_a &= E_{pk} \cdot \cos(\omega t) \\
+        e_b &= E_{pk} \cdot \cos(\omega t - \frac{2\pi}{3}) \\
+        e_c &= E_{pk} \cdot \cos(\omega t - \frac{4\pi}{3}) \\
+        i_a &= I_{pk} \cdot \cos(\omega t + \phi_a) \\
+        i_b &= I_{pk} \cdot \cos(\omega t - \frac{2\pi}{3} + \phi_b) \\
+        i_c &= I_{pk} \cdot \cos(\omega t - \frac{4\pi}{3} + \phi_c)
+    \end{split}
+\end{equation}
 The terminal voltages are determined by the modulation strategy, the DC link voltage and common mode voltage.\par
 \begin{equation}
     \begin{gathered}
