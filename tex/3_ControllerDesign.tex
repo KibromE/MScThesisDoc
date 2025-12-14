@@ -1,5 +1,11 @@
 \chapter{Controller Design}\label{ch:ControllerDesign}
 \section{Controller Structure}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=0.45]{img/controllerStructure.png}
+    \caption{Overall controller structure of the VSR under unbalanced grid voltage conditions}
+    \label{fig:controllerStructure}
+\end{figure}
 \section{Current Controller}
 The internal PI current controller's are popular in the industrial application for the reasons,
 that it is easy to implement and has low computational burden
@@ -11,7 +17,7 @@ term presents a coupling effect between the d and q axes, which must
 be considered in the controller design.\par
 \begin{figure}[ht]
 \centering
-\includegraphics[scale = 0.45]{img/decoupledController.png}
+\includegraphics[scale = 0.5]{img/decoupledController.png}
 \caption{Diagram of decoupled current controller}
 \label{fig:decoupledController}
 \end{figure}
@@ -147,3 +153,4 @@ changes in the reference current.
     \label{eq:time_constant_bandwidth}
 \end{equation}
 \section{DC Voltage Controller}
+\section{Phase Locked Loop (PLL)}

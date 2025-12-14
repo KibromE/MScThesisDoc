@@ -60,8 +60,10 @@
     \newpage
     \appendix
     \include{tex/Appendix}
-    \printbibliography[
-        heading=bibintoc,
-        title={References}]
+    \renewcommand{\bibname}{References}
+    \begingroup
+      \setlength{\emergencystretch}{1em} % prevent overfull lines in bibliography
+      \printbibliography[heading=bibintoc]
+    \endgroup
 \end{doublespacing}
 \end{document}
