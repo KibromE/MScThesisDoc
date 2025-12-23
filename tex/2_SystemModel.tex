@@ -321,6 +321,25 @@ factor in average.\par
     \end{split}
     \label{eq:power_coefficients}
 \end{equation}
+\section{DC link model}
+The DC link voltage dynamics can be modeled as a first-order system, where the input is the power
+injected into the DC link and the output is the DC link voltage. The energy stored in the DC link capacitor is given by:\par
+\begin{equation}
+    E_{c} = \frac{1}{2} C V_{dc}^{2}
+    \label{eq:dc_link_energy}
+\end{equation}
+where $C$ is the capacitance of the DC link capacitor and $V_{dc}$ is the DC link voltage.\par
+The power balance equation for the DC link can be expressed as:
+\begin{equation}
+    \frac{1}{2}C \frac{dV^{2}_{dc}}{dt} = P_{in} - P_{load}
+    \label{eq:dc_link_power_balance}
+\end{equation}
+where $P_{in}$ is the power injected into the DC link from the AC side and $P_{load}$ is the power drawn from the DC link to the load or grid.\par
+We can choose a new state variable $W = V_{dc}^{2}$, then the DC link voltage dynamics can be represented as:
+\begin{equation}
+    \frac{1}{2}C \frac{dW}{dt} = P_{in} - P_{load}
+    \label{eq:dc_link_dynamics}
+\end{equation}
 \section{Space vector modulation}
 \section{Model predictive control}
 \section{Per-Unit model representation}

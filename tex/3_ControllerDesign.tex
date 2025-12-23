@@ -153,13 +153,107 @@ changes in the reference current.
     \label{eq:time_constant_bandwidth}
 \end{equation}
 \section{DC Voltage Controller}
+The DC voltage controller is designed to regulate the DC link voltage of the VSR to a desired reference value.
+
 \section{Phase Locked Loop (PLL)}
 To ensure proper operation of the VSR under unbalanced grid voltage conditions,
 a robust phase-locked loop (PLL) is essential for accurate grid voltage phase angle and frequency estimation.
-The PLL structure used in this work is illustrated in figure [\ref{fig:PLLstructure}].
+The angle information provided by the PLL is crucial for the transformation of
+grid voltages and currents into the synchronous reference frame (dq frame).
+The PLL structure used in this work is illustrated in figure [\ref{fig:PLLstructure}].\par
 \begin{figure}[ht]
     \centering
     \includegraphics[scale=0.75]{img/PLL_Block_Diagram.png}
     \caption{Block diagram of the PLL structure}
     \label{fig:PLLstructure}
+\end{figure}
+The PLL takes the three-phase grid voltages as input, which are first transformed into the $\alpha \beta$
+stationary reference frame using the Clarke transformation. The $\alpha \beta$ voltages are then converted
+into the dq synchronous reference frame using the Park transformation, which requires an initial estimate
+of the grid voltage angle $\theta$. The q-axis voltage component $v_{q}$ is used as the error signal for the PLL,
+which is processed by a PI controller to adjust the estimated angle $\theta$.\par
+The PLL is designed to minimize the q-axis voltage component $v_{q}$, which ideally should be zero when the estimated 
+angle $\theta$ matches the actual grid voltage angle. The PI controller in the PLL adjusts the estimated angle based on
+the error signal, ensuring that the PLL can track changes in the grid voltage angle and frequency accurately.\par
+The PLL is designed to according \cite{PLL7467498, PLLWang2019}
+\begin{equation}
+    \begin{split}
+        \dot{\omega}  &= \gamma_1 \varepsilon\\
+        \dot{\theta} &= \omega + \gamma_2 \varepsilon
+    \end{split}
+    \label{eq: PLL model}
+\end{equation}
+where $\varepsilon$ is the PLL error signal of $v_q$, $\omega$ is the estimated angular frequency, $\theta$ is the estimated angle,
+and $\gamma_1$, $\gamma_2$ are the PLL PI controller gains ($\gamma_1$ is the integral gain, $\gamma_2$ is the proportional gain).\par
+The PI controller gains are designed based on the desired PLL bandwidth $\rho$ and $\hat{E}_g$ as shown in equations
+[\ref{eq: PLL gain 1}], [\ref{eq: PLL gain 2}] and [\ref{eq: resultant voltage}]:
+\begin{equation}
+    \gamma_1 = \frac{\rho^2}{\hat{E}_g}
+    \label{eq: PLL gain 1}
+\end{equation}
+\begin{equation}
+    \gamma_2 = 2 \frac{\rho}{\hat{E}_g}
+    \label{eq: PLL gain 2}
+\end{equation}
+\begin{equation}
+    \hat{E}_g = \sqrt{\hat{E}_d^2 + \hat{E}_q^2}
+    \label{eq: resultant voltage}
+\end{equation}
+\begin{figure}[ht!]
+    \centering
+    % First row of images
+    \subfloat[Balanced voltage input in abc frame]{
+        \includegraphics[width=0.45\linewidth]{img/PLL_balanced_voltage_abc.png}
+        \label{subfig:a voltage input }
+    }
+    \hfill
+    \subfloat[Balanced voltage input in $\alpha\beta$ frame]{
+        \includegraphics[width=0.45\linewidth]{img/PLL_balanced_voltage_alphabeta.png}
+        \label{subfig:b voltage input alphabeta }
+    }\\
+    \subfloat[Balanced voltage input in dq frame]{
+        \includegraphics[width=0.45\linewidth]{img/PLL_balanced_voltage_dq.png}
+        \label{subfig:c voltage input dq}
+    }
+    \hfill
+    \subfloat[PLL Angle estimation]{
+        \includegraphics[width=0.45\linewidth]{img/PLL_balanced_theta.png}
+        \label{subfig:d angle estimation }
+    }
+    \caption{Overall caption for the 2x2 grid of images.}
+    \label{fig:balanced_PLL}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    % First row of images
+    \subfloat[Unbalanced voltage input in abc frame]{
+        \includegraphics[width=0.45\linewidth]{img/PLL_unbalanced_voltage_abc.png}
+        \label{subfig:a voltage input abc}
+    }
+    \hfill
+    \subfloat[positive sequence voltage in abc frame]{
+        \includegraphics[width=0.45\linewidth]{img/PLL_unbalanced_voltage_abc_pos.png}
+        \label{subfig:b voltage input positive abc }
+    }\\
+    \subfloat[negative sequence voltage in abc frame]{
+        \includegraphics[width=0.45\linewidth]{img/PLL_unbalanced_voltage_abc_neg.png}
+        \label{subfig:c voltage input negative abc}
+    }
+    \hfill
+    \subfloat[positive sequence voltage in $\alpha\beta$ frame]{
+        \includegraphics[width=0.45\linewidth]{img/PLL_unbalanced_voltage_alphabeta_pos.png}
+        \label{subfig:d voltage input positive alphabeta}
+    }\\
+    \subfloat[positive sequence voltage in dq frame]{
+        \includegraphics[width=0.45\linewidth]{img/PLL_unbalanced_voltage_dq_pos.png}
+        \label{subfig:e voltage input positive dq}
+    }
+    \hfill
+    \subfloat[PLL Angle estimation]{
+        \includegraphics[width=0.45\linewidth]{img/PLL_unbalanced_theta.png}
+        \label{subfig:f angle estimation }
+    }
+    \caption{Overall caption for the 3x2 grid of images.}
+    \label{fig:unbalanced_PLL}
 \end{figure}
