@@ -6,6 +6,13 @@
     \caption{Overall controller structure of the VSR under unbalanced grid voltage conditions}
     \label{fig:controllerStructure}
 \end{figure}
+The control system adopts a cascaded loop structure to separate the fast dynamics of the grid currents
+from the slower dynamics of the DC link capacitor energy. Inner Loop (Current Control): A high-bandwidth
+PI controller (or similar) operating at the switching frequency ($f_{sw} = 10 \text{ kHz}$, $T_{inner} = 100 \mu\text{s}$)
+regulates the AC currents to track references.Outer Loop (MPC): A Model Predictive Controller operates at
+a lower sampling rate ($f_{dc} = 1 \text{ kHz}$, $T_{dc} = 1 \text{ms}$) to generate optimal current references
+($\mathbf{u}^*$). This multi-rate approach significantly reduces the computational burden of the optimization solver
+while maintaining high-fidelity current tracking.\par
 \section{Current Controller}
 The internal PI current controller's are popular in the industrial application for the reasons,
 that it is easy to implement and has low computational burden
@@ -21,7 +28,7 @@ be considered in the controller design.\par
 \caption{Diagram of decoupled current controller}
 \label{fig:decoupledController}
 \end{figure}
-\subsection{Cross Coupling cancellation}
+\subsection{Cross Coupling Cancellation}
 To design a PI controller for the current control loop, the cross coupling terms must be cancelled out.
 This is done by adding a feed forward term to the controller as shown in figure [\ref{fig:decoupledController}].
 The control variable $\mathcal{V}_{d}$ and $\mathcal{V}_{q}$ are defined as in equations[\ref{eq:control_positive}]
@@ -156,8 +163,9 @@ changes in the reference current.
 The DC voltage controller is designed to regulate the DC link voltage of the VSR to a desired reference value.
 The central objective is to regulate the DC link energy ($W = v_{dc}^2$) rather than the voltage directly, 
 as this linearizes the relationship between power and the state variable as shown in equation [\ref{eq:dc_link_dynamics}].
-Discretizing this equation using the Forward Euler method with sampling time $T_s$ of the DC control loop yields the discrete-time 
-prediction model:
+\subsection{Prediction Model}
+Discretizing equation [\ref{eq:dc_link_dynamics}] using the Forward Euler method with sampling time $T_s$ of the DC control
+loop yields the discrete-time prediction model:
 \begin{equation}
     W(k+1) = W(k) + \frac{2 T_s}{C} \left( P_{in}(k) - P_{load}(k) \right)
     \label{eq:dc_link_discrete_model}
@@ -240,6 +248,7 @@ Where the matrices are adapted for the horizon difference:
     \item $\mathbf{S}_d$: The disturbance response vector (size $N_p \times 1$).
         $$\mathbf{S}_d = \begin{bmatrix} D \\ 2D \\ 3D \\ \vdots \\ N_p D \end{bmatrix}$$
 \end{itemize}
+\subsection{Cost Function Formulation}
 The MPC solves an optimization problem at each step $k$ to minimize a cost function $J$ over the entire prediction horizon $N_p$.
 Even though we only calculate $N_c$ unique inputs, the cost function evaluates the performance of the system up to $N_p$ to ensure
 long-term stability.\par
@@ -266,14 +275,16 @@ Where:
 \end{itemize}
 The \textbf{Energy Tracking} term runs up to $N_p$, ensuring that the controller predicts the long-term consequence of its actions.
 The \textbf{Auxiliary Minimization} and \textbf{Control Effort} terms are summed up to $N_c-1$, corresponding to the active optimization window.\par
+\subsection{Constraints}
 The optimization is subject to physical constraints on the converter current rating. By using the reduced control horizon, we enforce
 these constraints on the optimized variables directly.
 \begin{equation}
     -I_{max} \leq \mathbf{u}(k+j) \leq I_{max}, \quad \forall j \in [0, N_c-1]
     \label{eq:control_input_constraint}
 \end{equation}
-This imposes "box constraints" on the $d$ and $q$ axis currents for the active control moves. Since the inputs beyond $N_c$ are
+This imposes "Hard constraints" on the $d$ and $q$ axis currents for the active control moves. Since the inputs beyond $N_c$ are
 held constant equal to $\mathbf{u}(k+N_c-1)$, satisfying the constraint for the last active move guarantees satisfaction for the entire horizon.\par
+\subsection{Optimization Problem (Quadratic Programming)}
 The optimization problem is formulated by substituting the prediction model into the cost function,
 the problem is reformulated as a standard Quadratic Programming (QP) problem with box constraints:
 \begin{equation}
@@ -335,7 +346,7 @@ Substituting equation [\ref{eq:prediction_error}] into the tracking part of the 
     \label{eq:tracking_cost_expanded}
 \end{equation}
 To define the auxiliary output vector $\mathbf{Y}_{aux}$, we can stack the auxiliary outputs over the control horizon and based on equation 
-[\ref{eq:Auxiliary_term_sample}], the linear relationship becomes a block-diagonal matrix $\mathbf{G}_{big}$: :
+[\ref{eq:Auxiliary_term_sample}], the linear relationship becomes a block-diagonal matrix $\mathbf{G}_{big}$:
 \begin{equation}
     \begin{split}
     \mathbf{Y}_{aux} &= \begin{bmatrix} \mathbf{y}(k)^T & \mathbf{y}(k+1)^T & \dots & \mathbf{y}(k+N_c-1)^T \end{bmatrix}^T \\
@@ -363,6 +374,22 @@ Integarting equations [\ref{eq:tracking_cost_expanded}] and [\ref{eq:auxiliary_c
     \mathbf{f}_{qp} = -2 \mathbf{S}_u^T \mathbf{Q}_{track} \mathbf{E}
     \label{eq:qp_gradient_vector}
 \end{equation}
+\subsection{Solver Selection}
+The selection of an appropriate Quadratic Programming (QP) solver is critical for the real-time feasibility 
+of the proposed MPC strategy. While the initial validation was performed using MATLAB's standard ({\fontfamily{qcr}\selectfont quadprog})
+function with the ({\fontfamily{qcr}\selectfont interior-point-convex}) algorithm, this approach is ill-suited 
+for embedded implementation due to its heavy reliance on dynamic memory allocation and complex linear algebra
+libraries. Consequently, the transition to an embedded-compatible solver required selecting an algorithm capable
+of deterministic execution and C-code generation.\par
+Based on the comparative evaluations presented in the jMPC Toolbox documentation and
+literature \cite{currie2014practical}, Wright's Active Set Method ({\fontfamily{qcr}\selectfont quad\_wright}) was 
+selected over other common embedded solvers such as Hildreth's Method. While Hildreth's algorithm 
+({\fontfamily{qcr}\selectfont quad\_hildreth}) is noted for its ease of implementation, established benchmarks 
+indicate that primal-dual active-set methods like Wright's typically exhibit superior convergence rates for small-to-medium
+scale problems with general linear constraints. Furthermore, ({\fontfamily{qcr}\selectfont quad\_wright}) provides a robust
+mechanism for handling the coupled constraints inherent in the proposed multi-horizon MPC design ($N_c < N_p$).
+Therefore, this thesis utilizes the ({\fontfamily{qcr}\selectfont quad\_wright}) solver to ensure the optimal balance 
+between computational efficiency and algorithmic robustness required for the $1 \text{ kHz}$ control loop.\par
 \section{Phase Locked Loop (PLL)}
 To ensure proper operation of the VSR under unbalanced grid voltage conditions,
 a robust phase-locked loop (PLL) is essential for accurate grid voltage phase angle and frequency estimation.
