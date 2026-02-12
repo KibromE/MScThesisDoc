@@ -7,6 +7,11 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{listings}
+\usepackage[bottom]{footmisc}
 \usepackage[style=ieee,maxbibnames=10,sorting=none]{biblatex}
+\usepackage{enumitem}
+\usepackage{array} % For better table formatting
+\newlist{tabitemize}{itemize}{1}
+\setlist[tabitemize]{label=\textbullet, nosep, leftmargin=*, before=\vspace{0.5\baselineskip}, after=\vspace{-0.5\baselineskip}}
 \DefineBibliographyStrings{english}{url= \textsc{url} ,  }% replaces the IEEE default "[Online]. Available" by "URL"
 \setlength{\parindent}{0pt} % No paragraph indentation
