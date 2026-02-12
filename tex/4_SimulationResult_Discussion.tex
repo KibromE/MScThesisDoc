@@ -1,1 +1,95 @@
 \chapter{Simulation Result \& Discussion}\label{SimulationResult}
+\section{Introduction}
+In chapter three, an Model Predictive controller (MPC) and a PI controller were designed to control
+3-phase active rectifier system. In this chapter, the performance of both controllers will be evaluated
+through simulation results. The simulation is carried out in MATLAB/Simulink environment\footnote{All Models in this thesis can be found in this github page https://github.com/KibromE/MScThesisDoc }, 
+and the system parameters used in the simulation are based on the values shown in Table \ref{tab:system_parameters} 
+for a 3-phase active rectifier system.\par
+\begin{table}[htbp]
+    \centering
+    \caption{System Parameters of 3-Phase Active Rectifier}
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Parameter} & \textbf{Symbol} & \textbf{ Value} \\ \hline
+        AC Source Voltage (line-line RMS) & $V_{LL}$ & 400 V \\ \hline
+        AC Source Frequency & $f$ & 50 Hz \\ \hline
+        Input Inductance & $L_{in}$ & 2 mH \\ \hline
+        Input Resistance & $R_{in}$ & 0.1 $\Omega$ \\ \hline
+        DC Link Capacitance & $C_{dc}$ & 1500 $\mu$F \\ \hline
+        DC Link Voltage & $V_{dc}$ & 700 V \\ \hline
+        Load Resistance & $R_{load}$ & 100 $\Omega$ \\ \hline
+        Switching Frequency & $f_{sw}$ & 10 kHz \\ \hline
+    \end{tabular}
+    \label{tab:system_parameters}
+\end{table}
+The controller parameters used in the simulation are based on the values shown in Table \ref{tab:controller_parameters} which
+are selected based on the tuning process described in chapter three. The MPC parameters are chosen to balance the trade-off 
+between control performance and computational complexity, while the inner current loop parameters are selected to ensure stability
+and fast response of the current control loop.\par
+\begin{table}[htbp]
+    \centering
+    \caption{Controller Parameters}
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Parameter} & \textbf{Symbol} & \textbf{ Value} \\ \hline
+        MPC Prediction Horizon & $N_p$ & 10 \\ \hline
+        MPC Control Horizon & $N_c$ & 10 \\ \hline
+        MPC Weighting for Control Input & $\lambda_R$ & 20e6 \\ \hline
+        MPC Weighting for Energy tracking & $\lambda_{W}$ & 160 \\ \hline
+        MPC Weighting for Reactive reduction & $\lambda_{Q}$ & 500 \\ \hline
+        MPC Weighting for Ripple Suppression & $\lambda_{Rip}$ & 2e6 \\ \hline
+        Maximum Control Input Constraint & $u_{max}$ & 50 A \\ \hline
+        Inner Current Loop Proportional Gain & $K_{p,inner}$ & 0.1 \\ \hline
+        Inner Current Loop Integral Gain & $K_{i,inner}$ & 50 \\ \hline
+        Inner Current Loop Bandwidth & $f_{bw,inner}$ & 1000 Hz \\ \hline
+        Inner Current Loop Sampling Time & $T_{s,inner}$ & 10 $\mu$s \\ \hline
+        Outer Voltage Loop Sampling Time & $T_{s,outer}$ & 100 $\mu$s \\ \hline
+    \end{tabular}
+    \label{tab:controller_parameters}
+\end{table}
+The simulation is conducted for both a linear mathematical model of the system and a nonlinear switching model.
+The linear model is used to evaluate the control performance under ideal conditions, while the nonlinear switching model is used
+to assess the robustness of the controllers under more realistic conditions that include switching effects and non-idealities.\par
+Both models are subjected to various grid conditions, including balanced and unbalanced scenarios, to evaluate the controllers' 
+performance in regulating the DC link voltage and maintaining power quality. The simulation results will be analyzed and compared 
+to determine the effectiveness of the MPC and PI controllers in different operating conditions.\par
+The test scenarios for the simulation are listed in Table \ref{tab:test_scenarios}, which include both balanced and unbalanced 
+grid conditions to evaluate the controllers' performance under different operating conditions.\par
+\begin{table}[htbp]
+    \centering
+    \caption{Test Scenarios for Simulation}
+\begin{tabular}{|l|p{7.5cm}|m{3.5cm}|}
+        \hline
+        \textbf{Test Scenario} & \textbf{Description} & \textbf{Voltage (V)}\\ \hline
+        Balanced Grid  & All three phases have equal voltage magnitudes and are 120 degrees apart in phase. & 
+        \begin{tabitemize}
+            \item $v_a = 230 \angle 0^\circ$
+            \item $v_b = 230 \angle 240^\circ$
+            \item $v_c = 230 \angle 120^\circ$
+        \end{tabitemize} \\ \hline
+        Type G Unbalanced  & One phase drops slightly; two others drop significantly with a shift phase. &
+        \begin{tabitemize}
+            \item $v_a = 214.6 \angle 0^\circ$
+            \item $v_b = 192.1 \angle 236^\circ$
+            \item $v_c = 192.1 \angle 124^\circ$
+        \end{tabitemize} \\ \hline
+        Type F Unbalanced  & One phase drops significantly, and the other two phases drop slightly with a phase shift. & 
+        \begin{tabitemize}
+            \item $v_a = 184 \angle 0^\circ$
+            \item $v_b = 207.4 \angle 243.7^\circ$
+            \item $v_c = 207.4 \angle 116.3^\circ$
+        \end{tabitemize} \\ \hline
+        Type B Unbalanced  & One phase has a reduced voltage magnitude while the other two phases remain unaffected. & 
+        \begin{tabitemize}
+            \item $v_a = 185 \angle 0^\circ$
+            \item $v_b = 230 \angle 240^\circ$
+            \item $v_c = 230 \angle 120^\circ$
+        \end{tabitemize} \\ \hline
+    \end{tabular}
+    \label{tab:test_scenarios}
+\end{table}
+\section{Simulation Results}
+\subsection{Simulation of Linear Mathematical Model}
+
+
+\subsection{Simulation of Nonlinear Switching Model}
