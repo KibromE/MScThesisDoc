@@ -160,9 +160,26 @@ changes in the reference current.
     \label{eq:time_constant_bandwidth}
 \end{equation}
 \section{DC Voltage MPC Controller}
+The Model Predictive Controller (MPC) is designed to regulate the DC link voltage of the VSR under unbalanced grid conditions.
+\begin{figure}[ht]!
+    \centering
+    \includegraphics[scale=0.6]{img/MPCPrediction&ControlHW.png}
+    \caption{Illustration of Prediction Horizon ($N_p$) and Control Horizon ($N_c$) in MPC \cite{Kaiser_Kutz_Brunton, currie2014practical}}
+    \label{fig:MPC_Horizons}
+\end{figure}
+The DC voltage controller is formulated to  balance computational efficiency with control stability, the MPC design decouples 
+the Prediction Horizon ($N_p$) from the Control Horizon ($N_c$). As illustrated in figure [\ref{fig:MPC_Horizons}]:
+\begin{itemize}
+    \item \textbf{Prediction Horizon} ($N_p$): The window over which the controller evaluates the state trajectory (DC Link Energy and actual currents).
+    A longer $N_p$ ensures stability by allowing the controller to foresee the long-term integration of energy.
+    \item \textbf{Control Horizon} ($N_c$): The number of future control moves the optimizer is free to vary. Beyond $N_c$, 
+    the control input is constrained to remain constant.
+\end{itemize}
+Eventhough selecting \textbf{Blocked Horizon}($N_c < N_p$) is preferable for computational efficiency, it has a trade-off with tuning,
+control performance and stability. So for high bandwidth control system it is preferred to use \textbf{Full Horizon}($N_c = N_p = N$)\par
 The DC voltage controller is designed to regulate the DC link voltage of the VSR to a desired reference value.
 The central objective is to regulate the DC link energy ($W = v_{dc}^2$) rather than the voltage directly, 
-as this linearizes the relationship between power and the state variable as shown in equation [\ref{eq:dc_link_dynamics}].
+as this linearizes the relationship between power and the state variable as shown in equation [\ref{eq:dc_link_dynamics}].\par
 \subsection{Prediction Model}
 Discretizing equation [\ref{eq:dc_link_dynamics}] using the Forward Euler method with sampling time $T_s$ of the DC control
 loop yields the discrete-time prediction model:
@@ -189,22 +206,6 @@ equation [\ref{eq:power_coefficients}].
     \item Row 1 ($P_0$): Drives the DC link energy state $W$.
     \item Row 2-4 ($Q_0, P_{c2}, P_{s2}$): Auxiliary outputs to be minimized (Regulation Objectives).
 \end{itemize}
-\begin{figure}[ht]
-    \centering
-    \includegraphics[scale=0.6]{img/MPCPrediction&ControlHW.png}
-    \caption{Illustration of Prediction Horizon ($N_p$) and Control Horizon ($N_c$) in MPC \cite{Kaiser_Kutz_Brunton, currie2014practical}}
-    \label{fig:MPC_Horizons}
-\end{figure}
-The DC voltage controller is formulated to  balance computational efficiency with control stability, the MPC design decouples 
-the Prediction Horizon ($N_p$) from the Control Horizon ($N_c$).
-\begin{itemize}
-    \item \textbf{Prediction Horizon} ($N_p$): The window over which the controller evaluates the state trajectory (DC Link Energy).
-    A longer $N_p$ ensures stability by allowing the controller to foresee the long-term integration of energy.
-    \item \textbf{Control Horizon} ($N_c$): The number of future control moves the optimizer is free to vary. Beyond $N_c$, 
-    the control input is constrained to remain constant.
-\end{itemize}
-The controller computes optimal current references for the first $N_c$ steps. For the remaining steps ($k+N_c$ to $k+N_p$),
-the control input is constrained to remain constant at the last optimized value.\par
 The decision vector of unknown control inputs, $\mathbf{U}$, is:
 \begin{equation}
     \mathbf{U} = [\mathbf{u}(k)^T, \mathbf{u}(k+1)^T, \dots, \mathbf{u}(k+N_c-1)^T]^T
@@ -224,26 +225,16 @@ Where the matrices are adapted for the horizon difference:
 \begin{itemize}
     \item $\mathbf{S}_x$: The free response vector (size $N_p \times 1$).
         $$\mathbf{S}_x = \begin{bmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{bmatrix}$$
-    \item $\mathbf{S}_u$: The forced response matrix (size $N_p \times N_c$). Crucially, the last column of this matrix accumulates 
+    \item $\mathbf{S}_u$: The forced response matrix (size $N \times 4N$). Crucially, the last column of this matrix accumulates 
     the effect of the final control input $\mathbf{u}(k+N_c-1)$ being applied repeatedly for the remainder of the prediction window.
     \begin{equation}
-        \mathbf{S}_u = 
-    \left[ \begin{array}{cccc}
-        \mathbf{B} & \mathbf{0} & \cdots & \mathbf{0} \\
-        \mathbf{AB} & \mathbf{B} & \cdots & \mathbf{0} \\
-        \vdots & \vdots & \ddots & \vdots \\
-        \mathbf{A}^{N_c-1}\mathbf{B} & \mathbf{A}^{N_c-2}\mathbf{B} & \cdots & \mathbf{B} \\
-        \hline 
-        \mathbf{A}^{N_c}\mathbf{B} & \mathbf{A}^{N_c-1}\mathbf{B} & \cdots & 2\mathbf{B} \\
-        \mathbf{A}^{N_c+1}\mathbf{B} & \mathbf{A}^{N_c}\mathbf{B} & \cdots & 3\mathbf{B} \\
-        \vdots & \vdots & \cdots & \vdots \\
-        \mathbf{A}^{N_p-1}\mathbf{B} & \mathbf{A}^{N_p-2}\mathbf{B} & \cdots & (N_p - N_c + 1)\mathbf{B}
-    \end{array} \right]
-    \begin{array}{l}
-        \left. \vphantom{\begin{matrix} B \\ B \\ \vdots \\ B \end{matrix}} \right\} \text{Rows } 1 \text{ to } N_c \\
-            \\
-        \left. \vphantom{\begin{matrix} B \\ B \\ \vdots \\ B \end{matrix}} \right\} \text{Rows } N_c+1 \text{ to } N_p
-    \end{array}
+         \mathbf{S}_u = \begin{bmatrix}
+            \mathbf{B} & \mathbf{0} & \mathbf{0} & \cdots & \mathbf{0} \\
+            \mathbf{A}\mathbf{B} & \mathbf{B} & \mathbf{0} & \cdots & \mathbf{0} \\
+            \mathbf{A}^2\mathbf{B} & \mathbf{A}\mathbf{B} & \mathbf{B} & \cdots & \mathbf{0} \\
+            \vdots & \vdots & \vdots & \ddots & \vdots \\
+            \mathbf{A}^{N_p-1}\mathbf{B} & \mathbf{A}^{N_p-2}\mathbf{B} & \mathbf{A}^{N_p-3}\mathbf{B} &  \cdots & \mathbf{B} 
+        \end{bmatrix}
     \end{equation}
     \item $\mathbf{S}_d$: The disturbance response vector (size $N_p \times 1$).
         $$\mathbf{S}_d = \begin{bmatrix} D \\ 2D \\ 3D \\ \vdots \\ N_p D \end{bmatrix}$$
@@ -262,7 +253,8 @@ The scalar cost function is formulated as:
 \begin{equation}
     \begin{split}
     J(\mathbf{U}) &= \sum_{i=1}^{N_p} \left( \underbrace{\lambda_1 (W_{ref} - W(k+i))^2}_{\text{Energy Tracking (Long Term)}} \right) \\
-    &+ \sum_{j=0}^{N_c-1} \left( \underbrace{\lambda_2 Q_0(k+j)^2 + \lambda_{3} P_{rip}(k+j)^2}_{\text{Auxiliary Minimization}} + \underbrace{\mathbf{u}(k+j)^T \mathbf{R} \mathbf{u}(k+j)}_{\text{Control Effort}} \right)
+    &+ \sum_{j=0}^{N_c-1} \left( \underbrace{\lambda_2 Q_0(k+j)^2 + \lambda_{3} P_{rip}(k+j)^2}_{\text{Auxiliary Minimization}} 
+    + \underbrace{\mathbf{u}(k+j)^T \mathbf{R} \mathbf{u}(k+j)}_{\text{Control Effort}} \right)
     \end{split}
     \label{eq:mpc_cost_function}
 \end{equation}
@@ -302,7 +294,7 @@ Where:
     \item \textbf{Gradient Vector} ($\mathbf{f}_{qp}$): represents the relationship between the current state $W(k)$, 
     the reference $W_{ref}$, and the gradient of the cost surface
 \end{itemize}
-To formulate $\mathbf{H}_{qp}$ and $\mathbf{f}_{qp}$, the cost function[\ref{eq:mpc_cost_function}] should be expressed
+To formulate $\mathbf{H}_{qp}$ and $\mathbf{f}_{qp}$, the cost function in equation [\ref{eq:mpc_cost_function}] should be expressed
 in standard linear algebraic form. This involves substituting the prediction model into the cost function.
 The standard QP problem minimizes:
 \begin{equation}
@@ -386,10 +378,8 @@ literature \cite{currie2014practical}, Wright's Active Set Method ({\fontfamily{
 selected over other common embedded solvers such as Hildreth's Method. While Hildreth's algorithm 
 ({\fontfamily{qcr}\selectfont quad\_hildreth}) is noted for its ease of implementation, established benchmarks 
 indicate that primal-dual active-set methods like Wright's typically exhibit superior convergence rates for small-to-medium
-scale problems with general linear constraints. Furthermore, ({\fontfamily{qcr}\selectfont quad\_wright}) provides a robust
-mechanism for handling the coupled constraints inherent in the proposed multi-horizon MPC design ($N_c < N_p$).
-Therefore, this thesis utilizes the ({\fontfamily{qcr}\selectfont quad\_wright}) solver to ensure the optimal balance 
-between computational efficiency and algorithmic robustness required for the $1 \text{ kHz}$ control loop.\par
+scale problems with general linear constraints. Therefore, this thesis utilizes the ({\fontfamily{qcr}\selectfont quad\_wright}) 
+solver to ensure the optimal balance between computational efficiency and algorithmic robustness required for the $1 \text{ kHz}$ control loop.\par
 \section{Phase Locked Loop (PLL)}
 To ensure proper operation of the VSR under unbalanced grid voltage conditions,
 a robust phase-locked loop (PLL) is essential for accurate grid voltage phase angle and frequency estimation.
