@@ -1,14 +1,30 @@
 \chapter{System Model}\label{ch:SystemModel}
-\section{Background}
+\section{Introduction}
+The design of a high-performance control system for a three-phase Active Voltage Source Rectifier (VSR) necessitates
+a precise mathematical representation of its physical dynamics. While the physical topology of the VSR—consisting of
+boost inductors, active switches (IGBTs), and a DC-link capacitor—is well established, its behavior under non-ideal
+grid conditions presents complex modeling challenges.\par
+Under balanced grid conditions, the system can be effectively modeled and controlled using a single synchronous Reference
+Frame ($dq$). However, practical power systems frequently experience voltage unbalances due to faults, asymmetrical loads,
+or transmission line unevenness. In such scenarios, the standard $dq$ model becomes insufficient because the negative-sequence
+voltage components appear as oscillating terms at twice the grid frequency ($2\omega$) in the synchronous frame. These
+oscillations propagate through the system, causing double-frequency ripples in the DC-link voltage and distorting the
+input currents.\par
+Therefore, to accurately capture the system's behavior under unbalanced conditions, it is necessary to move beyond
+simple time-domain equations. This chapter develops a comprehensive mathematical model of the VSR by employing 
+Symmetrical Component Theory. This approach decomposes the coupled three-phase system into decoupled positive
+and negative sequence networks. Furthermore, by applying Clarke ($\alpha\beta$) and Park ($dq$) transformations
+to both sequences, the time-varying AC quantities are converted into constant DC quantities, which are essential
+for the design of linear PI controllers and the predictive model required for Model Predictive Control (MPC).\par
 \section{Mathematical model of VSR}
-The voltage equations for the 3-phase system shown in [\ref{fig:topology}] can be written as:
+The voltage equations for the 3-phase system shown in figure[\ref{fig:topology}] can be written as:
 \begin{equation}
-\begin{gathered}
-    e_{a} = L \frac{di_a}{dt} + R i_a + \mathcal{V}_a\\
-    e_{b} = L \frac{di_b}{dt} + R i_b + \mathcal{V}_b\\
-    e_{c} = L \frac{di_c}{dt} + R i_c + \mathcal{V}_c
-\end{gathered}
-\label{eq:voltage_eq}
+    \begin{gathered}
+        e_{a} = L \frac{di_a}{dt} + R i_a + \mathcal{V}_a\\
+        e_{b} = L \frac{di_b}{dt} + R i_b + \mathcal{V}_b\\
+        e_{c} = L \frac{di_c}{dt} + R i_c + \mathcal{V}_c
+    \end{gathered}
+    \label{eq:voltage_eq}
 \end{equation}
 where $e_{a}, e_{b}, e_{c}$ are the grid phase voltages, $i_a, i_b, i_c$ are the phase currents, $L$ is the input inductance,
 $R$ is the input resistance, $\mathcal{V}_a, \mathcal{V}_b, \mathcal{V}_c$ are the rectifier terminal phase voltages.\par
@@ -30,7 +46,7 @@ The terminal voltages are determined by the modulation strategy, the DC link vol
         \mathcal{V}_b = S_b V_{dc} + V_{cm}\\
         \mathcal{V}_c = S_c V_{dc} + V_{cm}
     \end{gathered}
-\label{eq:common_mode_voltage}
+    \label{eq:common_mode_voltage}
 \end{equation}
 where $S_a, S_b, S_c$ are the switching states of the converter switches, $V_{dc}$ is the DC link voltage and
 $V_{cm}$ is the common mode voltage.\par
@@ -48,8 +64,8 @@ Incase of unbalanced grid conditions, the symmetrical sequence decomposition is 
 the system as shown in figure[\ref{fig:symmetricalDecomposition}]. The three-phase parameters can
 be decomposed into positive, negative, and zero sequence components represented by equation[\ref{eq:symmetrical_component}].
 The positive sequence components represent a balanced set of phasors that rotate
-in the same direction as the original phasors, the negative sequence components 
-rotate in the opposite direction, and the zero sequence components are in phase 
+in the same direction as the original phasors, the negative sequence components
+rotate in the opposite direction, and the zero sequence components are in phase
 with each other.\par
 Since the neutral point of the system is not connected to the ground, the zero sequence component is not present in the system.
 The derivation and Implementation of the symmetrical sequence decomposition is given in appendix \ref{App:SymmetricalComponents}.
@@ -61,15 +77,15 @@ The derivation and Implementation of the symmetrical sequence decomposition is g
 \end{equation}
 where $X_{abc}$ is the three-phase parameter, $X^{p}_{abc}, X^{n}_{abc}, X^{0}_{abc}$ are the positive, negative,
 and zero sequence components respectively.\par
-Thus the space vector of the unbalanced system can be transformed using the Clarke transformation as given in appendix \ref{App:ClarkParkTransformation}
+Thus the space vector of the unbalanced system can be transformed using the Clarke transformation as given in appendix \ref{App:ClarkeParkTransformation}
 to $\alpha\beta$ coordinates as space vector sum of the positive $X_{\alpha\beta}$ and negative $X_{\alpha\beta}$ sequence components.
 The model of the system in equation[\ref{eq:alpha_beta_model}] can be expressed in $\alpha\beta$ coordinates as follows:\par
 \begin{equation}
     \begin{split}
-            e^{p}_{\alpha} &=  L  \frac{d}{dt} i^{p}_{\alpha} + R i^{p}_{\alpha} + \mathcal{V}^{p}_{\alpha} \\
-            e^{p}_{\beta} &=  L  \frac{d}{dt} i^{p}_{\beta} + R i^{p}_{\beta} + \mathcal{V}^{p}_{\beta} \\
-            e^{n}_{\alpha} &=  L  \frac{d}{dt} i^{n}_{\alpha} + R i^{n}_{\alpha} + \mathcal{V}^{n}_{\alpha} \\
-            e^{n}_{\beta} &=  L  \frac{d}{dt} i^{n}_{\beta} + R i^{n}_{\beta} + \mathcal{V}^{n}_{\beta} 
+        e^{p}_{\alpha} &=  L  \frac{d}{dt} i^{p}_{\alpha} + R i^{p}_{\alpha} + \mathcal{V}^{p}_{\alpha} \\
+        e^{p}_{\beta} &=  L  \frac{d}{dt} i^{p}_{\beta} + R i^{p}_{\beta} + \mathcal{V}^{p}_{\beta} \\
+        e^{n}_{\alpha} &=  L  \frac{d}{dt} i^{n}_{\alpha} + R i^{n}_{\alpha} + \mathcal{V}^{n}_{\alpha} \\
+        e^{n}_{\beta} &=  L  \frac{d}{dt} i^{n}_{\beta} + R i^{n}_{\beta} + \mathcal{V}^{n}_{\beta}
     \end{split}
     \label{eq:alpha_beta_model}
 \end{equation}
@@ -89,8 +105,8 @@ The mathematical model of the system can be expressed in state space form in $\a
         \end{bmatrix}
         =
         \begin{bmatrix}
-            -\frac{R}{L} & 0 \\
-            0 & -\frac{R}{L}
+            -\frac{R}{L} & 0            \\
+            0            & -\frac{R}{L}
         \end{bmatrix}
         \begin{bmatrix}
             i^{p}_{\alpha} \\
@@ -98,8 +114,8 @@ The mathematical model of the system can be expressed in state space form in $\a
         \end{bmatrix}
         +
         \begin{bmatrix}
-            \frac{1}{L} & 0 \\
-            0 & \frac{1}{L}
+            \frac{1}{L} & 0           \\
+            0           & \frac{1}{L}
         \end{bmatrix}
         \begin{bmatrix}
             e^{p}_{\alpha} \\
@@ -107,14 +123,14 @@ The mathematical model of the system can be expressed in state space form in $\a
         \end{bmatrix}
         +
         \begin{bmatrix}
-            -\frac{1}{L} & 0 \\
-            0 & -\frac{1}{L}
+            -\frac{1}{L} & 0            \\
+            0            & -\frac{1}{L}
         \end{bmatrix}
         \begin{bmatrix}
             \mathcal{V}^{p}_{\alpha} \\
             \mathcal{V}^{p}_{\beta}
         \end{bmatrix}
-\end{split}
+    \end{split}
     \label{eq:state_space_alpha_beta_positive}
 \end{equation}
 \begin{equation}
@@ -126,8 +142,8 @@ The mathematical model of the system can be expressed in state space form in $\a
         \end{bmatrix}
         =
         \begin{bmatrix}
-            -\frac{R}{L} & 0 \\
-            0 & -\frac{R}{L}
+            -\frac{R}{L} & 0            \\
+            0            & -\frac{R}{L}
         \end{bmatrix}
         \begin{bmatrix}
             i^{n}_{\alpha} \\
@@ -135,8 +151,8 @@ The mathematical model of the system can be expressed in state space form in $\a
         \end{bmatrix}
         +
         \begin{bmatrix}
-            \frac{1}{L} & 0 \\
-            0 & \frac{1}{L}
+            \frac{1}{L} & 0           \\
+            0           & \frac{1}{L}
         \end{bmatrix}
         \begin{bmatrix}
             e^{n}_{\alpha} \\
@@ -144,8 +160,8 @@ The mathematical model of the system can be expressed in state space form in $\a
         \end{bmatrix}
         +
         \begin{bmatrix}
-            -\frac{1}{L} & 0 \\
-            0 & -\frac{1}{L}
+            -\frac{1}{L} & 0            \\
+            0            & -\frac{1}{L}
         \end{bmatrix}
         \begin{bmatrix}
             \mathcal{V}^{n}_{\alpha} \\
@@ -155,9 +171,9 @@ The mathematical model of the system can be expressed in state space form in $\a
     \label{eq:state_space_alpha_beta_negative}
 \end{equation}
 where $\mathcal{V}^{p}_{\alpha}, \mathcal{V}^{p}_{\beta}$ are the modulation signals for the positive sequence component
- and $\mathcal{V}^{n}_{\alpha}, \mathcal{V}^{n}_{\beta}$ are the modulation signals for the negative sequence component.\par
-Since both the positive and negative sequence components are decoupled, the system can be transformed into synchronous 
-rotating frame using the Park transformation as given in appendix \ref{App:ClarkParkTransformation}. The system can be 
+and $\mathcal{V}^{n}_{\alpha}, \mathcal{V}^{n}_{\beta}$ are the modulation signals for the negative sequence component.\par
+Since both the positive and negative sequence components are decoupled, the system can be transformed into synchronous
+rotating frame using the Park transformation as given in appendix \ref{App:ClarkeParkTransformation}. The system can be
 represented in the synchronous d-q frame as follows:
 \begin{equation}
     \begin{split}
@@ -168,8 +184,8 @@ represented in the synchronous d-q frame as follows:
         \end{bmatrix}
         &=
         \begin{bmatrix}
-            -\frac{R}{L} & \omega \\
-            -\omega & -\frac{R}{L}
+            -\frac{R}{L} & \omega       \\
+            -\omega      & -\frac{R}{L}
         \end{bmatrix}
         \begin{bmatrix}
             i^{p}_{d} \\
@@ -177,8 +193,8 @@ represented in the synchronous d-q frame as follows:
         \end{bmatrix}
         +
         \begin{bmatrix}
-            \frac{1}{L} & 0 \\
-            0 & \frac{1}{L}
+            \frac{1}{L} & 0           \\
+            0           & \frac{1}{L}
         \end{bmatrix}
         \begin{bmatrix}
             e^{p}_{d} \\
@@ -186,8 +202,8 @@ represented in the synchronous d-q frame as follows:
         \end{bmatrix}
         +
         \begin{bmatrix}
-            -\frac{1}{L} & 0 \\
-            0 & -\frac{1}{L}
+            -\frac{1}{L} & 0            \\
+            0            & -\frac{1}{L}
         \end{bmatrix}
         \begin{bmatrix}
             \mathcal{V}^{p}_{d} \\
@@ -205,8 +221,8 @@ represented in the synchronous d-q frame as follows:
         \end{bmatrix}
         &=
         \begin{bmatrix}
-            -\frac{R}{L} & -\omega \\
-            \omega & -\frac{R}{L}
+            -\frac{R}{L} & -\omega      \\
+            \omega       & -\frac{R}{L}
         \end{bmatrix}
         \begin{bmatrix}
             i^{n}_{d} \\
@@ -214,8 +230,8 @@ represented in the synchronous d-q frame as follows:
         \end{bmatrix}
         +
         \begin{bmatrix}
-            \frac{1}{L} & 0 \\
-            0 & \frac{1}{L}
+            \frac{1}{L} & 0           \\
+            0           & \frac{1}{L}
         \end{bmatrix}
         \begin{bmatrix}
             e^{n}_{d} \\
@@ -223,8 +239,8 @@ represented in the synchronous d-q frame as follows:
         \end{bmatrix}
         +
         \begin{bmatrix}
-            -\frac{1}{L} & 0 \\
-            0 & -\frac{1}{L}
+            -\frac{1}{L} & 0            \\
+            0            & -\frac{1}{L}
         \end{bmatrix}
         \begin{bmatrix}
             \mathcal{V}^{n}_{d} \\
@@ -263,24 +279,24 @@ Based on the phasor diagram in figure[\ref{fig:symmetricalDecomposition}], the c
 $\alpha$ and $\beta$ component currents. Then by inverse Park transformation, $\vec{i_{s}}$ is expressed:
 \begin{equation}
     \begin{split}
-            \vec{i_{s}} &= i_{\alpha} + ji_{\beta} = i_{\alpha}^{p} + ji_{\beta}^{p} + i_{\alpha}^{n} + ji_{\beta}^{n} \\
-            &= (i_{d}^{p} + ji_{q}^{p})e^{j\omega t} + (i_{d}^{n} + ji_{q}^{n})e^{-j\omega t}\\
-            &= i_{d}^{p} \cos(\omega t) - i_{q}^{p} \sin(\omega t) + j(i_{d}^{p} \sin(\omega t) + i_{q}^{p} \cos(\omega t))\\
-            &+ i_{d}^{n} \cos(\omega t) + i_{q}^{n} \sin(\omega t) + j(-i_{d}^{n} \sin(\omega t) + i_{q}^{n} \cos(\omega t))\\
-            &= i_{d}^{p} \cos(\omega t) - i_{q}^{p} \sin(\omega t) + i_{d}^{n} \cos(\omega t) + i_{q}^{n} \sin(\omega t)\\
-            &+ j(i_{d}^{p} \sin(\omega t) + i_{q}^{p} \cos(\omega t) - i_{d}^{n} \sin(\omega t) + i_{q}^{n} \cos(\omega t))
+        \vec{i_{s}} &= i_{\alpha} + ji_{\beta} = i_{\alpha}^{p} + ji_{\beta}^{p} + i_{\alpha}^{n} + ji_{\beta}^{n} \\
+        &= (i_{d}^{p} + ji_{q}^{p})e^{j\omega t} + (i_{d}^{n} + ji_{q}^{n})e^{-j\omega t}\\
+        &= i_{d}^{p} \cos(\omega t) - i_{q}^{p} \sin(\omega t) + j(i_{d}^{p} \sin(\omega t) + i_{q}^{p} \cos(\omega t))\\
+        &+ i_{d}^{n} \cos(\omega t) + i_{q}^{n} \sin(\omega t) + j(-i_{d}^{n} \sin(\omega t) + i_{q}^{n} \cos(\omega t))\\
+        &= i_{d}^{p} \cos(\omega t) - i_{q}^{p} \sin(\omega t) + i_{d}^{n} \cos(\omega t) + i_{q}^{n} \sin(\omega t)\\
+        &+ j(i_{d}^{p} \sin(\omega t) + i_{q}^{p} \cos(\omega t) - i_{d}^{n} \sin(\omega t) + i_{q}^{n} \cos(\omega t))
     \end{split}
     \label{eq:current_phasor}
 \end{equation}
 Similarly, the grid voltage signal can be expressed in d-q coordinates as:
 \begin{equation}
     \begin{split}
-            \vec{e_{s}} &= e_{\alpha} + je_{\beta} = e_{\alpha}^{p} + je_{\beta}^{p} + e_{\alpha}^{n} + je_{\beta}^{n} \\
-            &= (e_{d}^{p} + je_{q}^{p})e^{j\omega t} + (e_{d}^{n} + je_{q}^{n})e^{-j\omega t}\\
-            &= e_{d}^{p} \cos(\omega t) - e_{q}^{p} \sin(\omega t) + j(e_{d}^{p} \sin(\omega t) + e_{q}^{p} \cos(\omega t))\\
-            &+ e_{d}^{n} \cos(\omega t) + e_{q}^{n} \sin(\omega t) + j(-e_{d}^{n} \sin(\omega t) + e_{q}^{n} \cos(\omega t))\\
-            &= e_{d}^{p} \cos(\omega t) - e_{q}^{p} \sin(\omega t) + e_{d}^{n} \cos(\omega t) + e_{q}^{n} \sin(\omega t)\\
-            &+ j(e_{d}^{p} \sin(\omega t) + e_{q}^{p} cos(\omega t) - e_{d}^{n} \sin(\omega t) + e_{q}^{n} \cos(\omega t))
+        \vec{e_{s}} &= e_{\alpha} + je_{\beta} = e_{\alpha}^{p} + je_{\beta}^{p} + e_{\alpha}^{n} + je_{\beta}^{n} \\
+        &= (e_{d}^{p} + je_{q}^{p})e^{j\omega t} + (e_{d}^{n} + je_{q}^{n})e^{-j\omega t}\\
+        &= e_{d}^{p} \cos(\omega t) - e_{q}^{p} \sin(\omega t) + j(e_{d}^{p} \sin(\omega t) + e_{q}^{p} \cos(\omega t))\\
+        &+ e_{d}^{n} \cos(\omega t) + e_{q}^{n} \sin(\omega t) + j(-e_{d}^{n} \sin(\omega t) + e_{q}^{n} \cos(\omega t))\\
+        &= e_{d}^{p} \cos(\omega t) - e_{q}^{p} \sin(\omega t) + e_{d}^{n} \cos(\omega t) + e_{q}^{n} \sin(\omega t)\\
+        &+ j(e_{d}^{p} \sin(\omega t) + e_{q}^{p} cos(\omega t) - e_{d}^{n} \sin(\omega t) + e_{q}^{n} \cos(\omega t))
     \end{split}
     \label{eq:voltage_phasor}
 \end{equation}
@@ -291,7 +307,7 @@ the instantaneous active and reactive power can be expressed as:
         S(t) &= \frac{3}{2}(e_{\alpha} + je_{\beta})(i_{\alpha} + ji_{\beta})^{*} \\
         S(t) &= \frac{3}{2}\Big[ \big(e_{d}^{p}\cos(\omega t) - e_{q}^{p}\sin(\omega t) + e_{d}^{n}\cos(\omega t) + e_{q}^{n}\sin(\omega t)\big) \\
             &\quad + j\big(e_{d}^{p}\sin(\omega t) + e_{q}^{p}\cos(\omega t) - e_{d}^{n}\sin(\omega t) + e_{q}^{n}\cos(\omega t)\big) \Big] \\
-            &\quad \times \Big[ \big(i_{d}^{p}\cos(\omega t) - i_{q}^{p}\sin(\omega t) + i_{d}^{n}\cos(\omega t) + i_{q}^{n}\sin(\omega t)\big) \\
+        &\quad \times \Big[ \big(i_{d}^{p}\cos(\omega t) - i_{q}^{p}\sin(\omega t) + i_{d}^{n}\cos(\omega t) + i_{q}^{n}\sin(\omega t)\big) \\
             &\quad - j\big(i_{d}^{p}\sin(\omega t) + i_{q}^{p}\cos(\omega t) - i_{d}^{n}\sin(\omega t) + i_{q}^{n}\cos(\omega t)\big)\Big]
     \end{split}
     \label{eq:apparent_power_dq}
@@ -346,12 +362,12 @@ and DC link voltage. To synthesize these reference voltages across the terminals
 stage is required to translate continuous voltage commands into discrete switching states for the IGBTs.
 Space Vector Modulation (SVM) is selected for this work due to its superior utilization of the DC-link voltage
 ($15\%$ higher than sinusoidal PWM) and lower total harmonic distortion (THD).\par
-In SVM, the three-phase voltages are represented as a space vector in the complex plane. The switching states 
+In SVM, the three-phase voltages are represented as a space vector in the complex plane. The switching states
 of the inverter are determined based on the position of the reference voltage vector and the available switching
 states.\par
 \subsection{Voltage Space Vectors}
 As defined in the system model in equation[\ref{eq:common_mode_voltage}], the rectifier terminal voltages $\mathcal{V}_{a,b,c}$
-are determined by the switching states $S_{a,b,c}$ and the DC-link voltage $V_{dc}$. In a three-phase two-level converter, 
+are determined by the switching states $S_{a,b,c}$ and the DC-link voltage $V_{dc}$. In a three-phase two-level converter,
 there are $2^3 = 8$ possible switching states. These states can be mapped to stationary reference frame vectors using the Clarke Transformation.
 \begin{equation}
     \vec{V} = \frac{2}{3} V_{dc} (S_a + S_b e^{j2\pi/3} + S_c e^{-j2\pi/3})
@@ -360,9 +376,9 @@ there are $2^3 = 8$ possible switching states. These states can be mapped to sta
 This transformation results in:
 \begin{itemize}
     \item Six Active Vectors ($\vec{V}_1$ to $\vec{V}_6$): These form a regular hexagon in the $\alpha\beta$ plane,
-    dividing it into six sectors (I to VI). They have a magnitude of $\frac{2}{3}V_{dc}$.
+          dividing it into six sectors (I to VI). They have a magnitude of $\frac{2}{3}V_{dc}$.
     \item Two Zero Vectors ($\vec{V}_0$ and $\vec{V}_7$): Located at the origin. $\vec{V}_0$ corresponds to state [000]
-    and $\vec{V}_7$ to [111]. These vectors apply zero voltage to the load (shorting the terminals).
+          and $\vec{V}_7$ to [111]. These vectors apply zero voltage to the load (shorting the terminals).
 \end{itemize}
 \subsection{Reference Vector Synthesis}
 The current controllers output a reference voltage vector $\vec{V}_{ref}$ in the $dq$ frame.

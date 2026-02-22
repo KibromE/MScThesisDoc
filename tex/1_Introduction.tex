@@ -104,3 +104,26 @@ approach for enhancing the performance and reliability of power electronic conve
     \item Simulation of the controller and VSR under different test conditions
 \end{itemize}
 \section{Thesis organization}
+This thesis is organized into five chapters, structured to provide a comprehensive analysis of the proposed control strategy for
+a three-phase active voltage source rectifier under unbalanced grid conditions. The content of each chapter is outlined as follows.\par
+Chapter one establishes the background of the research, discussing the increasing relevance of active rectifiers in modern power systems.
+It presents a review of the existing literature regarding mathematical modeling of grid faults, traditional linear control strategies,
+and the emerging application of Model Predictive Control (MPC). Finally, it defines the problem statement, the specific objectives of 
+this research, and the structure of the thesis.\par
+The second chapter develops the comprehensive mathematical model of the three-phase Voltage Source Rectifier (VSR). It details the
+derivation of the voltage and current equations in the synchronous reference frame and introduces the method of Symmetrical Sequence
+Decomposition to analyze positive and negative sequence components. Furthermore, it analyzes the power flow equations to mathematically
+demonstrate how unbalanced grid voltages introduce second-order harmonic ripples in the DC-link voltage, which serves as the foundation
+for the control problem. Also describe the formulation and generation of space vector modulation PWM.\par
+Chapter three presents the core contribution of the thesis: the design of the proposed control architecture. It details the cascaded
+control structure, consisting of an inner-loop PI current controller for decoupling and regulating AC currents, and an outer-loop
+Model Predictive Controller (MPC) for DC-link voltage regulation. The chapter provides a step-by-step formulation of the MPC prediction model,
+the design of the cost function for ripple suppression, the handling of constraints, and the selection of the optimization solver.
+Additionally, the design of the Phase Locked Loop (PLL) for accurate synchronization under distorted grid conditions is described.\par
+The fourth chapter validates the proposed control strategy through extensive simulations using MATLAB/Simulink. It outlines the system 
+and controller parameters and defines the specific test scenarios, including balanced grid conditions and various unbalanced fault types.
+The results are analyzed to evaluate the controller's ability to maintain DC voltage regulation, suppress harmonic ripples, and
+ensure unity power factor.\par
+The final chapter summarizes the key findings and contributions of this research. It draws conclusions regarding the effectiveness of the
+proposed MPC strategy in mitigating the adverse effects of grid unbalance. Finally, it suggests potential areas for future research and
+improvements to further enhance the performance and applicability of the control system.\par

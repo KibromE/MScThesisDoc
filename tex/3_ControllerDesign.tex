@@ -8,25 +8,24 @@
 \end{figure}
 The control system adopts a cascaded loop structure to separate the fast dynamics of the grid currents
 from the slower dynamics of the DC link capacitor energy. Inner Loop (Current Control): A high-bandwidth
-PI controller (or similar) operating at the switching frequency ($f_{sw} = 10 \text{ kHz}$, $T_{inner} = 100 \mu\text{s}$)
+PI controller (or similar) operating at the switching frequency ($f_{sw} = 20 \text{ kHz}$, $T_{inner} = 50 \mu\text{s}$)
 regulates the AC currents to track references.Outer Loop (MPC): A Model Predictive Controller operates at
-a lower sampling rate ($f_{dc} = 1 \text{ kHz}$, $T_{dc} = 1 \text{ms}$) to generate optimal current references
+a lower sampling rate ($f_{dc} = 2 \text{ kHz}$, $T_{dc} = 0.5 \text{ms}$) to generate optimal current references
 ($\mathbf{u}^*$). This multi-rate approach significantly reduces the computational burden of the optimization solver
 while maintaining high-fidelity current tracking.\par
 \section{Current Controller}
-The internal PI current controller's are popular in the industrial application for the reasons,
-that it is easy to implement and has low computational burden
-which is a nesseccity for high bandwidth systems like the active rectifier.\par
-The mathematical model developed in equation [\ref{eq:state_space_dq_positive}] 
+The internal PI current controller's are popular in the industrial application for the reasons, that it is easy to implement
+and has low computational burden which is a nesseccity for high bandwidth systems like the active rectifier.\par
+The mathematical model developed in equation [\ref{eq:state_space_dq_positive}]
 and [\ref{eq:state_space_dq_negative}] describes the dynamics of the system
-and serves as the basis for the d and q current controller design. The $\omega L$ 
+and serves as the basis for the d and q current controller design. The $\omega L$
 term presents a coupling effect between the d and q axes, which must
 be considered in the controller design.\par
 \begin{figure}[ht]
-\centering
-\includegraphics[scale = 0.5]{img/decoupledController.png}
-\caption{Diagram of decoupled current controller}
-\label{fig:decoupledController}
+    \centering
+    \includegraphics[scale = 0.5]{img/decoupledController.png}
+    \caption{Diagram of decoupled current controller}
+    \label{fig:decoupledController}
 \end{figure}
 \subsection{Cross Coupling Cancellation}
 To design a PI controller for the current control loop, the cross coupling terms must be cancelled out.
@@ -47,7 +46,7 @@ and [\ref{eq:control_negative}], the system can be decoupled and the cross coupl
     \end{split}
     \label{eq:control_negative}
 \end{equation}
-where $\mathcal{U}_{d}$ and $\mathcal{U}_{q}$ are the new control variables for the decoupled system. 
+where $\mathcal{U}_{d}$ and $\mathcal{U}_{q}$ are the new control variables for the decoupled system.
 The system can now be represented as in equations [\ref{eq:decoupled_positive}] and [\ref{eq:decoupled_negative}]:
 \begin{equation}
     \begin{split}
@@ -70,8 +69,8 @@ The Laplace transform of the decoupled system $G(s)$ is given in equations [\ref
 \end{equation}
 \subsection{PI Current Controller Design}
 The PI current controller is designed based on decoupled differential equation in equation [\ref{eq:decoupled_laplace}].
-Let's define an auxiliary control variable $\mathcal{U}_{d}$ and $\mathcal{U}_{q}$ as in equations 
-[\ref{eq:aux_control_positive}] and [\ref{eq:aux_control_negative}]:
+Let's define an auxiliary control variable $\mathcal{U}_{d}$ and $\mathcal{U}_{q}$ as in equations
+    [\ref{eq:aux_control_positive}] and [\ref{eq:aux_control_negative}]:
 \begin{equation}
     \begin{split}
         \mathcal{U}_{d}^{p}    &= (i_{dref}^{p} - i_{d}^{p}) (k_{p} + \frac{k_{i}}{s})\\
@@ -89,14 +88,14 @@ Let's define an auxiliary control variable $\mathcal{U}_{d}$ and $\mathcal{U}_{q
 where $k_{p}$ and $k_{i}$ are the proportional and integral gains of the PI controller respectively.\par
 The closed loop transfer function of the system can be derived as in equation [\ref{eq:closed_loop_transfer_function}]:
 \begin{equation}
-    \frac{I(s)}{I_{ref}(s)} = \frac{(k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}}{1 + (k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}} 
+    \frac{I(s)}{I_{ref}(s)} = \frac{(k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}}{1 + (k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}}
     = \frac{k_{p} s + k_{i}}{L s^{2} + (R + k_{p}) s + k_{i}}
     \label{eq:closed_loop_transfer_function}
 \end{equation}
 To achieve a desired closed loop performance, among the various tuning methods, Internal Model Control (IMC)
 has been used for PI controller tuning for past decades in systems where an approximate model is available.
 This technique allows for adequate tracking and excels in disturbance rejection\cite{Shamsuzzoha2012, artIMCPIDShah}.
-The imperfect model should be incorporated as part of the controller design using an explicit model of the plant 
+The imperfect model should be incorporated as part of the controller design using an explicit model of the plant
 \cite{Shamsuzzoha2012}. This tuning provides robustness to the controller, with the control loop remaining stable
 even if the parameters change substantially from those used for tuning. This is an interesting feature for the real
 implementation of the VSC.\par
@@ -142,13 +141,13 @@ can be derived as:
     k_{i} = \frac{R}{\tau_c}
     \label{eq:final_ki}
 \end{equation}
-Once the PI controller gains are determined, they can be implemented in the closed loop transfer function 
-[\ref{eq:final_closed_loop_transfer_function}] to analyze the system performance.obtained from equation 
-[\ref{eq:closed_loop_transfer_function}] to analyze the system performance.
+Once the PI controller gains are determined, they can be implemented in the closed loop transfer function
+    [\ref{eq:final_closed_loop_transfer_function}] to analyze the system performance.obtained from equation
+    [\ref{eq:closed_loop_transfer_function}] to analyze the system performance.
 \begin{equation}
     \begin{split}
-    \frac{I(s)}{I_{ref}(s)} &=  \frac{(k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}}{1 + (k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}} \\
-    \frac{I(s)}{I_{ref}(s)} &= \frac{1}{\tau_c s + 1}
+        \frac{I(s)}{I_{ref}(s)} &=  \frac{(k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}}{1 + (k_{p} + \frac{k_{i}}{s}) \frac{1}{Ls + R}} \\
+        \frac{I(s)}{I_{ref}(s)} &= \frac{1}{\tau_c s + 1}
     \end{split}
     \label{eq:final_closed_loop_transfer_function}
 \end{equation}
@@ -167,18 +166,18 @@ The Model Predictive Controller (MPC) is designed to regulate the DC link voltag
     \caption{Illustration of Prediction Horizon ($N_p$) and Control Horizon ($N_c$) in MPC \cite{Kaiser_Kutz_Brunton, currie2014practical}}
     \label{fig:MPC_Horizons}
 \end{figure}
-The DC voltage controller is formulated to  balance computational efficiency with control stability, the MPC design decouples 
+The DC voltage controller is formulated to  balance computational efficiency with control stability, the MPC design decouples
 the Prediction Horizon ($N_p$) from the Control Horizon ($N_c$). As illustrated in figure [\ref{fig:MPC_Horizons}]:
 \begin{itemize}
     \item \textbf{Prediction Horizon} ($N_p$): The window over which the controller evaluates the state trajectory (DC Link Energy and actual currents).
-    A longer $N_p$ ensures stability by allowing the controller to foresee the long-term integration of energy.
-    \item \textbf{Control Horizon} ($N_c$): The number of future control moves the optimizer is free to vary. Beyond $N_c$, 
-    the control input is constrained to remain constant.
+          A longer $N_p$ ensures stability by allowing the controller to foresee the long-term integration of energy.
+    \item \textbf{Control Horizon} ($N_c$): The number of future control moves the optimizer is free to vary. Beyond $N_c$,
+          the control input is constrained to remain constant.
 \end{itemize}
 Eventhough selecting \textbf{Blocked Horizon}($N_c < N_p$) is preferable for computational efficiency, it has a trade-off with tuning,
-control performance and stability. So for high bandwidth control system it is preferred to use \textbf{Full Horizon}($N_c = N_p = N$)\par
+control performance and stability. So for high bandwidth control system it is preferred to use \textbf{Full Horizon}($N_c = N_p = N$).\par
 The DC voltage controller is designed to regulate the DC link voltage of the VSR to a desired reference value.
-The central objective is to regulate the DC link energy ($W = v_{dc}^2$) rather than the voltage directly, 
+The central objective is to regulate the DC link energy ($W = v_{dc}^2$) rather than the voltage directly,
 as this linearizes the relationship between power and the state variable as shown in equation [\ref{eq:dc_link_dynamics}].\par
 \subsection{Prediction Model}
 Discretizing equation [\ref{eq:dc_link_dynamics}] using the Forward Euler method with sampling time $T_s$ of the DC control
@@ -194,13 +193,13 @@ The control input vector is defined as the current references:
     \mathbf{u}(k) = \begin{bmatrix} i_d^p(k) & i_q^p(k) & i_d^n(k) & i_q^n(k) \end{bmatrix}^T
     \label{eq:control_input_vector}
 \end{equation}
-The instantaneous power components—Average Real Power ($P_0$), Average Reactive Power ($Q_0$), and Second-Order Ripples 
+The instantaneous power components—Average Real Power ($P_0$), Average Reactive Power ($Q_0$), and Second-Order Ripples
 ($P_{c2}, P_{s2}$)—are linearly related to the currents via the grid voltage matrix $\mathbf{G}(k)$:
 \begin{equation}
     \mathbf{y}(k) = \begin{bmatrix} P_0(k) \\ Q_0(k) \\ P_{c2}(k) \\ P_{s2}(k) \end{bmatrix} = \mathbf{G}(k) \mathbf{u}(k)
     \label{eq:Auxiliary_term_sample}
 \end{equation}
-Here, $\mathbf{G}(k)$ is a $4 \times 4$ time-varying matrix dependent on the measured grid voltages $e_{dq}^p$ and $e_{dq}^n$ drived in 
+Here, $\mathbf{G}(k)$ is a $4 \times 4$ time-varying matrix dependent on the measured grid voltages $e_{dq}^p$ and $e_{dq}^n$ drived in
 equation [\ref{eq:power_coefficients}].
 \begin{itemize}
     \item Row 1 ($P_0$): Drives the DC link energy state $W$.
@@ -224,20 +223,20 @@ The future states of the DC energy over the full prediction horizon ($N_p$) are 
 Where the matrices are adapted for the horizon difference:
 \begin{itemize}
     \item $\mathbf{S}_x$: The free response vector (size $N_p \times 1$).
-        $$\mathbf{S}_x = \begin{bmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{bmatrix}$$
-    \item $\mathbf{S}_u$: The forced response matrix (size $N \times 4N$). Crucially, the last column of this matrix accumulates 
-    the effect of the final control input $\mathbf{u}(k+N_c-1)$ being applied repeatedly for the remainder of the prediction window.
-    \begin{equation}
-         \mathbf{S}_u = \begin{bmatrix}
-            \mathbf{B} & \mathbf{0} & \mathbf{0} & \cdots & \mathbf{0} \\
-            \mathbf{A}\mathbf{B} & \mathbf{B} & \mathbf{0} & \cdots & \mathbf{0} \\
-            \mathbf{A}^2\mathbf{B} & \mathbf{A}\mathbf{B} & \mathbf{B} & \cdots & \mathbf{0} \\
-            \vdots & \vdots & \vdots & \ddots & \vdots \\
-            \mathbf{A}^{N_p-1}\mathbf{B} & \mathbf{A}^{N_p-2}\mathbf{B} & \mathbf{A}^{N_p-3}\mathbf{B} &  \cdots & \mathbf{B} 
-        \end{bmatrix}
-    \end{equation}
+          $$\mathbf{S}_x = \begin{bmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{bmatrix}$$
+    \item $\mathbf{S}_u$: The forced response matrix (size $N \times 4N$). Crucially, the last column of this matrix accumulates
+          the effect of the final control input $\mathbf{u}(k+N_c-1)$ being applied repeatedly for the remainder of the prediction window.
+          \begin{equation}
+              \mathbf{S}_u = \begin{bmatrix}
+                  \mathbf{B}                   & \mathbf{0}                   & \mathbf{0}                   & \cdots & \mathbf{0} \\
+                  \mathbf{A}\mathbf{B}         & \mathbf{B}                   & \mathbf{0}                   & \cdots & \mathbf{0} \\
+                  \mathbf{A}^2\mathbf{B}       & \mathbf{A}\mathbf{B}         & \mathbf{B}                   & \cdots & \mathbf{0} \\
+                  \vdots                       & \vdots                       & \vdots                       & \ddots & \vdots     \\
+                  \mathbf{A}^{N_p-1}\mathbf{B} & \mathbf{A}^{N_p-2}\mathbf{B} & \mathbf{A}^{N_p-3}\mathbf{B} & \cdots & \mathbf{B}
+              \end{bmatrix}
+          \end{equation}
     \item $\mathbf{S}_d$: The disturbance response vector (size $N_p \times 1$).
-        $$\mathbf{S}_d = \begin{bmatrix} D \\ 2D \\ 3D \\ \vdots \\ N_p D \end{bmatrix}$$
+          $$\mathbf{S}_d = \begin{bmatrix} D \\ 2D \\ 3D \\ \vdots \\ N_p D \end{bmatrix}$$
 \end{itemize}
 \subsection{Cost Function Formulation}
 The MPC solves an optimization problem at each step $k$ to minimize a cost function $J$ over the entire prediction horizon $N_p$.
@@ -252,17 +251,17 @@ The cost function aims to achieve three objectives:
 The scalar cost function is formulated as:
 \begin{equation}
     \begin{split}
-    J(\mathbf{U}) &= \sum_{i=1}^{N_p} \left( \underbrace{\lambda_1 (W_{ref} - W(k+i))^2}_{\text{Energy Tracking (Long Term)}} \right) \\
-    &+ \sum_{j=0}^{N_c-1} \left( \underbrace{\lambda_2 Q_0(k+j)^2 + \lambda_{3} P_{rip}(k+j)^2}_{\text{Auxiliary Minimization}} 
-    + \underbrace{\mathbf{u}(k+j)^T \mathbf{R} \mathbf{u}(k+j)}_{\text{Control Effort}} \right)
+        J(\mathbf{U}) &= \sum_{i=1}^{N_p} \left( \underbrace{\lambda_1 (W_{ref} - W(k+i))^2}_{\text{Energy Tracking (Long Term)}} \right) \\
+        &+ \sum_{j=0}^{N_c-1} \left( \underbrace{\lambda_2 Q_0(k+j)^2 + \lambda_{3} P_{rip}(k+j)^2}_{\text{Auxiliary Minimization}}
+        + \underbrace{\mathbf{u}(k+j)^T \mathbf{R} \mathbf{u}(k+j)}_{\text{Control Effort}} \right)
     \end{split}
     \label{eq:mpc_cost_function}
 \end{equation}
 Where:
 \begin{itemize}
     \item $\lambda_1$: Prioritizes DC voltage tracking stiffness.
-    \item $\lambda_2, \lambda_3$: Penalizes reactive power and power ripples. High values here force the controller to use 
-    Negative Sequence currents to cancel oscillations actively.
+    \item $\lambda_2, \lambda_3$: Penalizes reactive power and power ripples. High values here force the controller to use
+          Negative Sequence currents to cancel oscillations actively.
     \item $\mathbf{R}$: A regularization matrix to smooth the control action and prevent numerical ill-conditioning.
 \end{itemize}
 The \textbf{Energy Tracking} term runs up to $N_p$, ensuring that the controller predicts the long-term consequence of its actions.
@@ -290,9 +289,9 @@ Where:
 \begin{itemize}
     \item \textbf{Decision Vector} $\mathbf{U}$: Has size $N_c \times 4$.
     \item \textbf{Hessian Matrix} ($\mathbf{H}_{qp}$): A positive-definite matrix of size $(4N_c \times 4N_c)$.
-    This matrix condenses the cost information from the full $N_p$ horizon into the smaller $N_c$ variable space.
-    \item \textbf{Gradient Vector} ($\mathbf{f}_{qp}$): represents the relationship between the current state $W(k)$, 
-    the reference $W_{ref}$, and the gradient of the cost surface
+          This matrix condenses the cost information from the full $N_p$ horizon into the smaller $N_c$ variable space.
+    \item \textbf{Gradient Vector} ($\mathbf{f}_{qp}$): represents the relationship between the current state $W(k)$,
+          the reference $W_{ref}$, and the gradient of the cost surface
 \end{itemize}
 To formulate $\mathbf{H}_{qp}$ and $\mathbf{f}_{qp}$, the cost function in equation [\ref{eq:mpc_cost_function}] should be expressed
 in standard linear algebraic form. This involves substituting the prediction model into the cost function.
@@ -304,7 +303,7 @@ The standard QP problem minimizes:
 Instead of writing the cost function in equation[\ref{eq:mpc_cost_function}] in sums, stack the terms in full matrix form here,
 \begin{equation}
     J = \underbrace{(\mathbf{W}_{ref} - \mathbf{W}_{pred})^T \mathbf{Q}_{track} (\mathbf{W}_{ref} - \mathbf{W}_{pred})}_{\text{Energy Tracking}}
-    + \underbrace{\mathbf{U}^T \mathbf{R}_{reg} \mathbf{U}}_{\text{Control Effort}} 
+    + \underbrace{\mathbf{U}^T \mathbf{R}_{reg} \mathbf{U}}_{\text{Control Effort}}
     + \underbrace{\mathbf{Y}_{aux}^T \mathbf{Q}_{aux} \mathbf{Y}_{aux}}_{\text{Auxiliary Minimization}}
     \label{eq:mpc_cost_function_matrix}
 \end{equation}
@@ -314,7 +313,7 @@ where:
     \item $\mathbf{R}_{reg}$: Diagonal matrix of size $4N_c \times 4N_c$ containing $\lambda_R$.
     \item $\mathbf{Q}_{aux}$: Diagonal matrix containing $\lambda_2, \lambda_3$ (for Q and Ripples).
 \end{itemize}
-To Integrate the prediction model in equation in [\ref{eq:prediction_model_matrix}], 
+To Integrate the prediction model in equation in [\ref{eq:prediction_model_matrix}],
 lets defining a new variable \textbf{Tracking Error Vector} ($\mathbf{E}$) as:
 \begin{equation}
     \mathbf{E} = \mathbf{W}_{ref} - (\mathbf{S}_x W_k + \mathbf{S}_d)
@@ -324,61 +323,61 @@ Using the prediction model in equation [\ref{eq:prediction_model_matrix}], the $
 term in the cost function can be replaced as shown in equation [\ref{eq:prediction_error}].
 \begin{equation}
     \begin{split}
-    (\mathbf{W}_{ref} - \mathbf{W}_{pred}) &= \mathbf{W}_{ref} - \mathbf{S}_x W(k) - \mathbf{S}_u \mathbf{U} - \mathbf{S}_d P_{load}(k) \\
-    (\mathbf{W}_{ref} - \mathbf{W}_{pred}) &= \mathbf{E} - \mathbf{S}_u \mathbf{U}
+        (\mathbf{W}_{ref} - \mathbf{W}_{pred}) &= \mathbf{W}_{ref} - \mathbf{S}_x W(k) - \mathbf{S}_u \mathbf{U} - \mathbf{S}_d P_{load}(k) \\
+        (\mathbf{W}_{ref} - \mathbf{W}_{pred}) &= \mathbf{E} - \mathbf{S}_u \mathbf{U}
     \end{split}
     \label{eq:prediction_error}
 \end{equation}
 Substituting equation [\ref{eq:prediction_error}] into the tracking part of the cost function in equation [\ref{eq:mpc_cost_function_matrix}],
 \begin{equation}
     \begin{split}
-    J_{track} &= (\mathbf{E} - \mathbf{S}_u \mathbf{U})^T \mathbf{Q}_{track} (\mathbf{E} - \mathbf{S}_u \mathbf{U}) \\
-    J_{track} &= \mathbf{U}^T \mathbf{S}_u^T \mathbf{Q}_{track} \mathbf{S}_u \mathbf{U} - 2 \mathbf{E}^T \mathbf{Q}_{track} \mathbf{S}_u \mathbf{U} + \mathbf{E}^T \mathbf{Q}_{track} \mathbf{E}
+        J_{track} &= (\mathbf{E} - \mathbf{S}_u \mathbf{U})^T \mathbf{Q}_{track} (\mathbf{E} - \mathbf{S}_u \mathbf{U}) \\
+        J_{track} &= \mathbf{U}^T \mathbf{S}_u^T \mathbf{Q}_{track} \mathbf{S}_u \mathbf{U} - 2 \mathbf{E}^T \mathbf{Q}_{track} \mathbf{S}_u \mathbf{U} + \mathbf{E}^T \mathbf{Q}_{track} \mathbf{E}
     \end{split}
     \label{eq:tracking_cost_expanded}
 \end{equation}
-To define the auxiliary output vector $\mathbf{Y}_{aux}$, we can stack the auxiliary outputs over the control horizon and based on equation 
-[\ref{eq:Auxiliary_term_sample}], the linear relationship becomes a block-diagonal matrix $\mathbf{G}_{big}$:
+To define the auxiliary output vector $\mathbf{Y}_{aux}$, we can stack the auxiliary outputs over the control horizon and based on equation
+    [\ref{eq:Auxiliary_term_sample}], the linear relationship becomes a block-diagonal matrix $\mathbf{G}_{big}$:
 \begin{equation}
     \begin{split}
-    \mathbf{Y}_{aux} &= \begin{bmatrix} \mathbf{y}(k)^T & \mathbf{y}(k+1)^T & \dots & \mathbf{y}(k+N_c-1)^T \end{bmatrix}^T \\
-    \mathbf{Y}_{aux} &= \mathbf{G}_{big} \mathbf{U}
+        \mathbf{Y}_{aux} &= \begin{bmatrix} \mathbf{y}(k)^T & \mathbf{y}(k+1)^T & \dots & \mathbf{y}(k+N_c-1)^T \end{bmatrix}^T \\
+        \mathbf{Y}_{aux} &= \mathbf{G}_{big} \mathbf{U}
     \end{split}
     \label{eq:auxiliary_output_vector}
 \end{equation}
-Similarly, substituting equation [\ref{eq:auxiliary_output_vector}] into the auxiliary part of the cost function in equation 
-[\ref{eq:mpc_cost_function_matrix}]:
+Similarly, substituting equation [\ref{eq:auxiliary_output_vector}] into the auxiliary part of the cost function in equation
+    [\ref{eq:mpc_cost_function_matrix}]:
 \begin{equation}
     \begin{split}
-    J_{aux} &= \mathbf{Y}_{aux}^T \mathbf{Q}_{aux} \mathbf{Y}_{aux} \\
-    J_{aux} &= (\mathbf{G}_{big} \mathbf{U})^T \mathbf{Q}_{aux} (\mathbf{G}_{big} \mathbf{U}) \\
-    J_{aux} &= \mathbf{U}^T \mathbf{G}_{big}^T \mathbf{Q}_{aux} \mathbf{G}_{big} \mathbf{U}
+        J_{aux} &= \mathbf{Y}_{aux}^T \mathbf{Q}_{aux} \mathbf{Y}_{aux} \\
+        J_{aux} &= (\mathbf{G}_{big} \mathbf{U})^T \mathbf{Q}_{aux} (\mathbf{G}_{big} \mathbf{U}) \\
+        J_{aux} &= \mathbf{U}^T \mathbf{G}_{big}^T \mathbf{Q}_{aux} \mathbf{G}_{big} \mathbf{U}
     \end{split}
     \label{eq:auxiliary_cost_expanded}
 \end{equation}
-Integarting equations [\ref{eq:tracking_cost_expanded}] and [\ref{eq:auxiliary_cost_expanded}] into the full cost function in equation 
-[\ref{eq:mpc_cost_function_matrix}], we can identify the Hessian matrix $\mathbf{H}_{qp}$ and gradient vector $\mathbf{f}_{qp}$ as:
+Integarting equations [\ref{eq:tracking_cost_expanded}] and [\ref{eq:auxiliary_cost_expanded}] into the full cost function in equation
+    [\ref{eq:mpc_cost_function_matrix}], we can identify the Hessian matrix $\mathbf{H}_{qp}$ and gradient vector $\mathbf{f}_{qp}$ as:
 \begin{equation}
     \mathbf{H}_{qp} = 2 \left( \mathbf{S}_u^T \mathbf{Q}_{track} \mathbf{S}_u + \mathbf{G}_{big}^T \mathbf{Q}_{aux} \mathbf{G}_{big} + \mathbf{R}_{reg} \right)
     \label{eq:qp_hessian_matrix}
-    \end{equation}
+\end{equation}
 \begin{equation}
     \mathbf{f}_{qp} = -2 \mathbf{S}_u^T \mathbf{Q}_{track} \mathbf{E}
     \label{eq:qp_gradient_vector}
 \end{equation}
 \subsection{Solver Selection}
-The selection of an appropriate Quadratic Programming (QP) solver is critical for the real-time feasibility 
+The selection of an appropriate Quadratic Programming (QP) solver is critical for the real-time feasibility
 of the proposed MPC strategy. While the initial validation was performed using MATLAB's standard ({\fontfamily{qcr}\selectfont quadprog})
-function with the ({\fontfamily{qcr}\selectfont interior-point-convex}) algorithm, this approach is ill-suited 
+function with the ({\fontfamily{qcr}\selectfont interior-point-convex}) algorithm, this approach is ill-suited
 for embedded implementation due to its heavy reliance on dynamic memory allocation and complex linear algebra
 libraries. Consequently, the transition to an embedded-compatible solver required selecting an algorithm capable
 of deterministic execution and C-code generation.\par
 Based on the comparative evaluations presented in the jMPC Toolbox documentation and
-literature \cite{currie2014practical}, Wright's Active Set Method ({\fontfamily{qcr}\selectfont quad\_wright}) was 
-selected over other common embedded solvers such as Hildreth's Method. While Hildreth's algorithm 
-({\fontfamily{qcr}\selectfont quad\_hildreth}) is noted for its ease of implementation, established benchmarks 
+literature \cite{currie2014practical}, Wright's Active Set Method ({\fontfamily{qcr}\selectfont quad\_wright}) was
+selected over other common embedded solvers such as Hildreth's Method. While Hildreth's algorithm
+({\fontfamily{qcr}\selectfont quad\_hildreth}) is noted for its ease of implementation, established benchmarks
 indicate that primal-dual active-set methods like Wright's typically exhibit superior convergence rates for small-to-medium
-scale problems with general linear constraints. Therefore, this thesis utilizes the ({\fontfamily{qcr}\selectfont quad\_wright}) 
+scale problems with general linear constraints. Therefore, this thesis utilizes the ({\fontfamily{qcr}\selectfont quad\_wright})
 solver to ensure the optimal balance between computational efficiency and algorithmic robustness required for the $1 \text{ kHz}$ control loop.\par
 \section{Phase Locked Loop (PLL)}
 To ensure proper operation of the VSR under unbalanced grid voltage conditions,
@@ -397,7 +396,7 @@ stationary reference frame using the Clarke transformation. The $\alpha \beta$ v
 into the dq synchronous reference frame using the Park transformation, which requires an initial estimate
 of the grid voltage angle $\theta$. The q-axis voltage component $v_{q}$ is used as the error signal for the PLL,
 which is processed by a PI controller to adjust the estimated angle $\theta$.\par
-The PLL is designed to minimize the q-axis voltage component $v_{q}$, which ideally should be zero when the estimated 
+The PLL is designed to minimize the q-axis voltage component $v_{q}$, which ideally should be zero when the estimated
 angle $\theta$ matches the actual grid voltage angle. The PI controller in the PLL adjusts the estimated angle based on
 the error signal, ensuring that the PLL can track changes in the grid voltage angle and frequency accurately.\par
 The PLL is designed to according \cite{PLL7467498, PLLWang2019}
@@ -411,7 +410,7 @@ The PLL is designed to according \cite{PLL7467498, PLLWang2019}
 where $\varepsilon$ is the PLL error signal of $v_q$, $\omega$ is the estimated angular frequency, $\theta$ is the estimated angle,
 and $\gamma_1$, $\gamma_2$ are the PLL PI controller gains ($\gamma_1$ is the integral gain, $\gamma_2$ is the proportional gain).\par
 The PI controller gains are designed based on the desired PLL bandwidth $\rho$ and $\hat{E}_g$ as shown in equations
-[\ref{eq: PLL gain 1}], [\ref{eq: PLL gain 2}] and [\ref{eq: resultant voltage}]:
+    [\ref{eq: PLL gain 1}], [\ref{eq: PLL gain 2}] and [\ref{eq: resultant voltage}]:
 \begin{equation}
     \gamma_1 = \frac{\rho^2}{\hat{E}_g}
     \label{eq: PLL gain 1}
@@ -445,7 +444,7 @@ The PI controller gains are designed based on the desired PLL bandwidth $\rho$ a
         \includegraphics[width=0.45\linewidth]{img/PLL_balanced_theta.png}
         \label{subfig:d angle estimation }
     }
-    \caption{Overall caption for the 2x2 grid of images.}
+    \caption{PLL simulation in balanced grid conditions.}
     \label{fig:balanced_PLL}
 \end{figure}
 
@@ -479,6 +478,6 @@ The PI controller gains are designed based on the desired PLL bandwidth $\rho$ a
         \includegraphics[width=0.45\linewidth]{img/PLL_unbalanced_theta.png}
         \label{subfig:f angle estimation }
     }
-    \caption{Overall caption for the 3x2 grid of images.}
+    \caption{PLL simulation in unbalanced grid conditions.}
     \label{fig:unbalanced_PLL}
 \end{figure}

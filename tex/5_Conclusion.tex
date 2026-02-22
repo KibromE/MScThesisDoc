@@ -1,3 +1,34 @@
 \chapter{Conclusion}\label{ch:Conclusion}
 \section{Conclusion}
+As active voltage source rectifiers (VSRs) become increasingly critical in modern power applications—such
+as EV charging stations and renewable energy integration—their reliability under non-ideal grid conditions
+is of paramount importance. This thesis investigated the adverse effects of unbalanced grid voltages, which
+inherently generate negative-sequence currents and induce detrimental 100-Hz power oscillations on the DC-link.\par
+The core contribution of this research lies in the integration of Symmetrical Component Extraction with an
+Model Predictive Control (MPC) algorithm. By mapping the coupled three-phase system into decoupled
+positive and negative sequence networks, an accurate discrete-time prediction model was formulated.
+The controller was designed to regulate the square of the DC-link voltage (energy) to linearize the
+power dynamics. A carefully structured multi-objective cost function was developed to simultaneously
+track the DC energy reference, enforce unity power factor, and suppress second-order active and reactive
+power ripples.\par
+The effectiveness of the proposed architecture was rigorously tested against realistic grid fault scenario
+(Math Bollen's Type B, F, and G sags) using a switching nonlinear model in Simulink. The simulation results
+conclusively demonstrated that the proposed controller heavily attenuates the negative-sequence currents and
+stabilizes the DC output. The dynamic response was exceptionally smooth, achieving settling times ranging
+from 127.8 ms to 140.5 ms and limiting voltage overshoots to a maximum of 1.55\% even under the complex
+phase-shifting conditions of Type F and Type G faults. Ultimately, this thesis proves that predictive control,
+when combined with accurate sequence decomposition, offers a highly resilient and fast-acting solution for
+VSRs facing grid asymmetries.\par
 \section{Future Work}
+The findings of this thesis lay a strong foundation for advanced power converter control, opening several
+promising directions for future investigation:
+\begin{itemize}
+    \item \textbf{Predictive Model Update:} Future research could explore adaptive MPC frameworks that update
+    the prediction model parameters in real-time to account for system nonlinearities, parameter variations,
+    and unmodeled dynamics, further enhancing robustness and performance.
+    \item \textbf{Grid Voltage Sensorless Control:} To reduce hardware costs and increase system reliability,
+    future iterations of this controller could incorporate advanced observers (such as Extended Kalman Filters) to
+    estimate the grid voltages and sequence components, eliminating the need for physical AC voltage sensors.
+    \item \textbf{Experimental Validation:} Implementing the proposed control strategy on a hardware testbed 
+    to validate its performance under real-world conditions, including measurement noise and component non-idealities.
+\end{itemize}

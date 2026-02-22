@@ -13,9 +13,9 @@ transformations.\par
     \end{bmatrix}
     =
     \begin{bmatrix}
-        1 & 1 & 1 \\
-        1 & a^2 & a \\
-        1 & a & a^2
+        1 & 1   & 1   \\
+        1 & a^2 & a   \\
+        1 & a   & a^2
     \end{bmatrix}
     \begin{bmatrix}
         X^0_a \\
@@ -33,8 +33,8 @@ transformations.\par
     =
     \frac{1}{3}
     \begin{bmatrix}
-        1 & 1 & 1 \\
-        1 & a & a^2 \\
+        1 & 1   & 1   \\
+        1 & a   & a^2 \\
         1 & a^2 & a
     \end{bmatrix}
     \begin{bmatrix}
@@ -44,10 +44,10 @@ transformations.\par
     \end{bmatrix}
     \label{eq:symmetrical_component_calculation}
 \end{equation}
-where \( a = e^{j2\pi/3} = \frac{-1}{2} + j\frac{\sqrt{3}}{2} \) is the operator 
+where \( a = e^{j2\pi/3} = \frac{-1}{2} + j\frac{\sqrt{3}}{2} \) is the operator
 that represents a 120-degree phase shift.\par
-From equation[\ref{eq:symmetrical_component_definition}] the symmetrical components 
-can be calculated from the three-phase components using the inverse transformation 
+From equation[\ref{eq:symmetrical_component_definition}] the symmetrical components
+can be calculated from the three-phase components using the inverse transformation
 of equation[\ref{eq:symmetrical_component_calculation}], and the \(X^{p,n}_b\) and \(X^{p,n}_c\)
 phases of the symmetrical components are derived by shifting the \(X^{p,n}_a\) phase by
 120 and 240 degrees.\par
@@ -59,7 +59,7 @@ phases of the symmetrical components are derived by shifting the \(X^{p,n}_a\) p
         X^n_c &= a^2 \times X^n_a
     \end{split}
 \end{equation}
-To calculate the three phases of the symmetrical components, Lets assume a 
+To calculate the three phases of the symmetrical components, Lets assume a
 three-phase system \( X_a \), \( X_b \), and \( X_c \), represented as
 \begin{equation}
     X_{abc} = X_{pk} \cdot \cos(\omega t + \phi_{abc})
@@ -68,85 +68,85 @@ three-phase system \( X_a \), \( X_b \), and \( X_c \), represented as
 The system can be expressed in a phasorial form as
 \begin{equation}
     \begin{split}
-    \overline{X}_{abc} &= X_{pk_{abc}}\cdot e^{j(\omega t + \phi_{abc})} \\
-    \overline{X}_{abc} &= X_{pk_{abc}}\cdot [\cos(\omega t + \phi_{abc}) + j \sin(\omega t + \phi_{abc})] 
+        \overline{X}_{abc} &= X_{pk_{abc}}\cdot e^{j(\omega t + \phi_{abc})} \\
+        \overline{X}_{abc} &= X_{pk_{abc}}\cdot [\cos(\omega t + \phi_{abc}) + j \sin(\omega t + \phi_{abc})]
     \end{split}
     \label{eq:three_phase_system_phasor}
 \end{equation}
 Then symmetrical components can be calculated using the following transformation:
 \begin{equation}
     \begin{split}
-    \begin{bmatrix}
-        X^p_a \\
-        X^p_b \\
-        X^p_c
-    \end{bmatrix}
-    =
-    \frac{1}{3}
-    \begin{bmatrix}
-        1 & a & a^2 \\
-        a^2 & 1 & a \\
-        a & a^2 & 1
-    \end{bmatrix}
-    \begin{bmatrix}
-        \overline{X}_a \\
-        \overline{X}_b \\
-        \overline{X}_c
-    \end{bmatrix}
+        \begin{bmatrix}
+            X^p_a \\
+            X^p_b \\
+            X^p_c
+        \end{bmatrix}
+        =
+        \frac{1}{3}
+        \begin{bmatrix}
+            1   & a   & a^2 \\
+            a^2 & 1   & a   \\
+            a   & a^2 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            \overline{X}_a \\
+            \overline{X}_b \\
+            \overline{X}_c
+        \end{bmatrix} = A^p \cdot \overline{X}_{abc}
     \end{split}
     \label{eq:symmetrical_components_transformation_positive}
 \end{equation}
 \begin{equation}
     \begin{split}
-    \begin{bmatrix}
-        X^n_a \\
-        X^n_b \\
-        X^n_c
-    \end{bmatrix}
-    =
-    \frac{1}{3}
-    \begin{bmatrix}
-        1 & a^2 & a \\
-        a & 1 & a^2 \\
-        a^2 & a & 1
-    \end{bmatrix}
-    \begin{bmatrix}
-        \overline{X}_a \\
-        \overline{X}_b \\
-        \overline{X}_c
-    \end{bmatrix}
+        \begin{bmatrix}
+            X^n_a \\
+            X^n_b \\
+            X^n_c
+        \end{bmatrix}
+        =
+        \frac{1}{3}
+        \begin{bmatrix}
+            1   & a^2 & a   \\
+            a   & 1   & a^2 \\
+            a^2 & a   & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            \overline{X}_a \\
+            \overline{X}_b \\
+            \overline{X}_c
+        \end{bmatrix} = A^n \cdot \overline{X}_{abc}
     \end{split}
     \label{eq:symmetrical_components_transformation_negative}
 \end{equation}
 \begin{equation}
     \begin{split}
-    \begin{bmatrix}
-        X^0_a \\
-        X^0_b \\
-        X^0_c
-    \end{bmatrix}
-    =
-    \frac{1}{3}
-    \begin{bmatrix}
-        1 & 1 & 1 \\
-        1 & 1 & 1 \\
-        1 & 1 & 1
-    \end{bmatrix}
-    \begin{bmatrix}
-        \overline{X}_a \\
-        \overline{X}_b \\
-        \overline{X}_c
-    \end{bmatrix}
+        \begin{bmatrix}
+            X^0_a \\
+            X^0_b \\
+            X^0_c
+        \end{bmatrix}
+        =
+        \frac{1}{3}
+        \begin{bmatrix}
+            1 & 1 & 1 \\
+            1 & 1 & 1 \\
+            1 & 1 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            \overline{X}_a \\
+            \overline{X}_b \\
+            \overline{X}_c
+        \end{bmatrix} = A^0 \cdot \overline{X}_{abc}
     \end{split}
     \label{eq:symmetrical_components_transformation_zero}
 \end{equation}
 The implementation of the symmetrical components transformation in equations
-[\ref{eq:symmetrical_components_transformation_positive}],
+    [\ref{eq:symmetrical_components_transformation_positive}],
 [\ref{eq:symmetrical_components_transformation_negative}], and
-[\ref{eq:symmetrical_components_transformation_zero}] can be summarized in the
+    [\ref{eq:symmetrical_components_transformation_zero}] can be summarized in the
 figure \ref{fig:Symmetrical_Components_Transformation_Block_Diagram}. where $T$
 is the period of the grid, used to generate $90^\circ$ phase shift. $A^p$, $A^n$
-and $A^0$ are transformation matrix for positive,negative and zero sequence 
+and $A^0$ are transformation matrix for positive,negative and zero sequence
 components respectively.\par
 \begin{figure}[H]
     \centering
@@ -155,4 +155,129 @@ components respectively.\par
     \label{fig:Symmetrical_Components_Transformation_Block_Diagram}
 \end{figure}
 \newpage
-\chapter{Clark and Park Transformation}\label{App:ClarkParkTransformation}
+\chapter{Clarke and Park Transformation}\label{App:ClarkeParkTransformation}
+The control of the three-phase active rectifier relies on transforming the three-phase AC quantities
+(voltages and currents) into constant DC quantities. This is achieved using the Clarke and Park transformations.
+Under unbalanced grid conditions, these transformations must be applied to both positive and negative sequence components.
+\section{Clarke Transformation (\texorpdfstring{$\alpha\beta$}{alphabeta})}
+The Clarke transformation translates the three-phase instantaneous variables in the $abc$ reference frame into a
+two-phase stationary orthogonal frame ($\alpha\beta$). The transformation preserves the amplitude of the variables (Amplitude Invariant).
+For a three-phase vector $\mathbf{x}_{abc} = [x_a, x_b, x_c]^T$, the $\alpha\beta$ components are calculated as:
+\begin{equation}
+    \begin{bmatrix}
+        x_{\alpha} \\
+        x_{\beta}
+    \end{bmatrix}
+    = \frac{2}{3}
+    \begin{bmatrix}
+        1 & -\frac{1}{2}       & -\frac{1}{2}        \\
+        0 & \frac{\sqrt{3}}{2} & -\frac{\sqrt{3}}{2}
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_a \\
+        x_b \\
+        x_c
+    \end{bmatrix}
+\end{equation}
+The inverse Clarke transformation, used to convert reference vectors back to the three-phase domain for modulation, is given by:
+\begin{equation}
+    \begin{bmatrix}
+        x_a \\
+        x_b \\
+        x_c
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        1            & 0                   \\
+        -\frac{1}{2} & \frac{\sqrt{3}}{2}  \\
+        -\frac{1}{2} & -\frac{\sqrt{3}}{2}
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_{\alpha} \\
+        x_{\beta}
+    \end{bmatrix}
+\end{equation}
+\section{Park Transformation  (\texorpdfstring{$dq$}{dq})}
+The Park transformation converts the stationary $\alpha\beta$ quantities into a rotating synchronous reference frame ($dq$).
+In unbalanced systems, two separate rotating frames are utilized: one rotating in the positive direction (counter-clockwise)
+and one in the negative direction (clockwise).
+\subsection{Positive Sequence Park Transformation (\texorpdfstring{$dq^+$}{dq+})}
+The positive sequence components ($x_{\alpha}^p, x_{\beta}^p$) are transformed into a synchronous frame rotating at the grid
+angular frequency $+\omega$. The angle $\theta$ is the phase angle of the grid voltage vector, tracked by the PLL.
+\begin{equation}
+    \begin{bmatrix}
+        x_d^p \\
+        x_q^p
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        \cos(\theta)  & \sin(\theta) \\
+        -\sin(\theta) & \cos(\theta)
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_{\alpha}^p \\
+        x_{\beta}^p
+    \end{bmatrix}
+\end{equation}
+\subsection{Negative Sequence Park Transformation (\texorpdfstring{$dq^-$}{dq-})}
+The negative sequence components ($x_{\alpha}^n, x_{\beta}^n$) rotate at $-\omega$ with respect to the stationary frame.
+To transform these into DC quantities, the Park transformation employs a reference frame rotating in the opposite direction ($-\theta$).
+\begin{equation}
+    \begin{bmatrix}
+        x_d^n \\
+        x_q^n
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        \cos(-\theta)  & \sin(-\theta) \\
+        -\sin(-\theta) & \cos(-\theta)
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_{\alpha}^n \\
+        x_{\beta}^n
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        \cos(\theta) & -\sin(\theta) \\
+        \sin(\theta) & \cos(\theta)
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_{\alpha}^n \\
+        x_{\beta}^n
+    \end{bmatrix}
+\end{equation}
+\subsection{Inverse Park Transformation}
+For Space Vector Modulation, the reference voltage vectors generated by the controllers in the $dq$ frames
+must be transformed back to the stationary $\alpha\beta$ frame. The inverse Park transformation is given by:\par
+\textbf{Positive Sequence:}
+\begin{equation}
+    \begin{bmatrix}
+        x_{\alpha}^p \\
+        x_{\beta}^p
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        \cos(\theta) & -\sin(\theta) \\
+        \sin(\theta) & \cos(\theta)
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_d^p \\
+        x_q^p
+    \end{bmatrix}
+\end{equation}
+\textbf{Negative Sequence:}
+\begin{equation}
+    \begin{bmatrix}
+        x_{\alpha}^n \\
+        x_{\beta}^n
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        \cos(\theta)  & \sin(\theta) \\
+        -\sin(\theta) & \cos(\theta)
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_d^n \\
+        x_q^n
+    \end{bmatrix}
+\end{equation}

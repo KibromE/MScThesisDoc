@@ -2,7 +2,7 @@
 \section*{Examiner Approval Sheet}
 We, the undersigned members of the Board of Examiners of the final open defense by Kibrom
 Esayas, have read and evaluated his thesis entitled \textbf{“Model predictive control of active
-voltage source rectifier's output voltage under unbalanced grid voltage conditions”} ,
+voltage source rectifier's output voltage under unbalanced grid voltage conditions”},
 and examined the candidate. This is, therefore, to certify that the thesis has been accepted in
 partial fulfillment of the requirements for the degree.
 \begin{table}[H]
@@ -58,18 +58,23 @@ First and foremost I would like to thank GOD.
 \newpage
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
-This thesis is presents a continuous control set model predictive control of Outputs DC voltage
-and harmonic of voltage source rectifer under unbalanced and distorted grid voltages. The
-proposed control system solves increase in voltage ripple and input current harmonics of voltage
-source rectifier exhibit when the supply AC voltage are unbalanced and distorted. In this
-paper a mathematical model of the VSR under unbalanced and distorted supply in the form of
-positive and negative sequence components, then the model is used to predict the future system
-behaviour until the time horizon. A cost function that discribe the desired system performance
-is designed,and it is minimized to generate optimal control signal for predefned time horizon.
-Lastly the paper discusses the use of CCS-MPC in VSR and presents the obtained result from
-MATLAB simulation.\par
+This thesis presents a Model Predictive Control (MPC) strategy for a three-phase Active Voltage Source Rectifier (VSR)
+operating under unbalanced and distorted grid conditions. Conventional control methods often struggle to maintain 
+power quality during grid faults, leading to significant DC-link voltage ripples and harmonic distortion in the input
+currents. To address these challenges, this research develops a robust control framework that integrates a mathematical
+model of the VSR based on symmetrical sequence decomposition.\par
+The proposed system utilizes a cascaded control structure, employing an outer-loop MPC to regulate the DC-link energy
+and an inner-loop PI controller for precise current tracking. A comprehensive discrete-time prediction model is
+derived to forecast the future behavior of the positive and negative sequence components. A specialized cost function
+is designed and minimized to generate optimal control references, specifically targeting the suppression of second-order
+power oscillations (120 Hz ripple) and the mitigation of negative-sequence currents.\par
+The performance of the proposed controller is validated through extensive simulations in the MATLAB/Simulink environment
+using both linear and nonlinear switching models. Test scenarios include balanced grid conditions and various unbalanced
+fault types. The results demonstrate that the proposed MPC strategy achieves superior DC-link voltage regulation and
+reduced harmonic distortion compared to traditional control methods, effectively ensuring unity power factor and stable
+operation even under grid unbalance.\par
 \bigskip
 
-\textbf{Keywords: Active Rectifier, VSR, Continuous Control Set (CCS), MPC, Unbalanced
-Operating Conditions}
+\textbf{Keywords:  Active Rectifier, Voltage Source Rectifier (VSR), Model Predictive Control (MPC),
+ Unbalanced Grid Conditions, Symmetrical Components}
 
