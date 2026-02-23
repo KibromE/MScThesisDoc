@@ -2,8 +2,8 @@
 \section{Background}
 Power electronic converters are an electrical circuit that convert electrical energy
 from on level of voltage/current/frequency to another using a semiconductor based 
-electronic switches and energy storage components \cite{holmes2003pulse,mohan2003power,
-rodriguez2012predictive}. As the demand for expansion of renewable energy and high efficiency
+electronic switches and energy storage components [\cite{holmes2003pulse,mohan2003power,
+rodriguez2012predictive}]. As the demand for expansion of renewable energy and high efficiency
 energy conversion is growing, power electronic systems are widely being used to process
 the available power to meet load requirements. For this reason, a Three-Phase AC/DC active
 rectifier has been gaining momentum in high power electric vehicles (EV) charging stations,
@@ -16,11 +16,11 @@ ripple in the output side which requirements large filters in both AC and DC sid
 those filters are very costly and bulky. With the development self-commutating power electronic
 devices (MOSFET, IGBT \& GTO etc.) many topologies have developed to overcome the shortcomings 
 of the conventional converters, such as multilevel, multipulse, boost, buck, PFC etc.
-\cite{articleKolarI,articleKolarII,ReviewSafayatullah,batteries9030150}. Among the
+[\cite{articleKolarI,articleKolarII,ReviewSafayatullah,batteries9030150}]. Among the
 improved power converters, a Pulse Width Modulation (PWM) based power converters preferred for 
 their high efficiency.\par
 
-The three phase two level boost rectifier shown in fig.\ref{fig:topology} is a PWM controlled,
+The three phase two level boost rectifier shown in fig.[\ref{fig:topology}] is a PWM controlled,
 low-cost, well-known and robust topology consisting of six active switches, a DC link capacitor and 
 three AC side inductors with continuous input current, bidirectional power flow capability and 
 nearly unity power factor performance. Since the output of the rectifier is connected to DC 
@@ -35,59 +35,59 @@ capacitor, which often supplies a controlled DC voltage, it is called a \textit{
 
 \subsection{Introduction to Active Voltage Source Rectifiers}
 To establish the hardware context of the thesis, it is essential to understand the topologies available 
-for three-phase power factor correction (PFC). The article \cite{friedli2014} provide a comprehensive
+for three-phase power factor correction (PFC). The article [\cite{friedli2014}] provide a comprehensive
 comparative evaluation of active rectifiers, categorizing them into boost-type and buck-type systems. 
 They highlight that boost-type rectifiers, such as the six-switch boost-type and the VIENNA rectifier, 
 are widely used for industrial applications requiring controlled DC output voltage and sinusoidal input currents. 
 For applications requiring high power density and efficiency, the VIENNA rectifier is noted for its three-level 
 characteristic, which reduces inductor volume compared to two-level topologies. However, the active six-switch 
-boost-type rectifier remains a robust standard for bidirectional power flow capabilities \cite{friedli2014}.
+boost-type rectifier remains a robust standard for bidirectional power flow capabilities [\cite{friedli2014}].
 
 \subsection{Mathematical Modeling of Unbalanced Grid Conditions}
 Understanding the mathematical decomposition of grid faults is crucial for controlling output voltage under 
-unbalanced conditions. \cite{paap2000} details the application of symmetrical components in the time domain, 
+unbalanced conditions. [\cite{paap2000}] details the application of symmetrical components in the time domain, 
 a fundamental theory for analyzing asymmetries. The transformation of arbitrary instantaneous variables into 
 positive, negative, and zero-sequence components allows for the decoupling of control systems. This paper emphasizes 
 that under unbalanced conditions, the negative-sequence component is the complex conjugate of the positive sequence
-in the time domain, which is vital for calculating instantaneous power and detecting faults \cite{paap2000}.
+in the time domain, which is vital for calculating instantaneous power and detecting faults [\cite{paap2000}].
 
 \subsection{Traditional Control Strategies for Unbalanced Grid Voltage}
 Before introducing Model Predictive Control (MPC), it is necessary to review traditional linear control methods 
-used to mitigate unbalance.The Paper \cite{song1999} addressed the issue where voltage unbalance causes 120-Hz 
+used to mitigate unbalance. The Paper [\cite{song1999}] addressed the issue where voltage unbalance causes 120-Hz 
 ripples in the DC-link voltage and increases reactive power. They proposed a dual current control scheme using two 
 synchronous reference frames (SRF): one rotating counter-clockwise for the positive sequence and one clockwise for 
 the negative sequence. By filtering out the oscillating components in each frame, they achieved constant DC-link 
-voltage regulation without increasing control gains to dangerous levels \cite{song1999}.\par
+voltage regulation without increasing control gains to dangerous levels [\cite{song1999}].\par
 While effective, Proportional-Integral (PI) controllers face stability issues under dynamic fault conditions. 
-The article \cite{mirhosseini2013} discuss the stability restrictions of PI parameters when using Moving 
+The article [\cite{mirhosseini2013}] discuss the stability restrictions of PI parameters when using Moving 
 Average Filters (MAF) to extract sequence components. The delay introduced by filtering techniques slows down the 
 dynamic response of the system, creating a tradeoff between stability regions and fast dynamic performance. 
 They suggest that alternative controllers, such as Proportional-Resonant (PR) or MPC, may offer faster dynamics 
-\cite{mirhosseini2013}.\par
-The article \cite{camacho2016} explored strategies to maximize voltage support during grid faults. They developed 
+[\cite{mirhosseini2013}].\par
+The article [\cite{camacho2016}] explored strategies to maximize voltage support during grid faults. They developed 
 optimal solutions to maximize positive sequence voltage or minimize negative sequence voltage while injecting maximum
 rated current. Their work highlights that optimal power reference generation depends heavily on the grid impedance 
-($L/R$ ratio) \cite{camacho2016}. Similarly, The article \cite{alathamneh2022} proposed a method using time-domain
+($L/R$ ratio) [\cite{camacho2016}]. Similarly, The article [\cite{alathamneh2022}] proposed a method using time-domain
 symmetrical component extraction to balance grid currents and eliminate power oscillations, thereby stabilizing the DC-link voltage.\par
 
 \subsection{Model Predictive Control of Active Voltage Source Rectifiers}
 Model Predictive Control (MPC) has emerged as a powerful control strategy for power electronic converters,
-offering advantages such as constraint handling and multivariable control. \cite{rodriguez2012predictive}
+offering advantages such as constraint handling and multivariable control. [\cite{rodriguez2012predictive}]
 provide a comprehensive overview of MPC applications in power electronics, highlighting its ability to predict future system behavior
 and optimize control actions accordingly. They emphasize that MPC can effectively manage the nonlinearities and constraints inherent 
 in power electronic systems.\par
 Specifically for active voltage source rectifiers, MPC has been shown to improve performance under unbalanced grid conditions. 
-The paper \cite{wang2015pid} developed an MPC strategy that directly controls the output voltage of a three-phase VSR under 
+The paper [\cite{wang2015pid}] developed an MPC strategy that directly controls the output voltage of a three-phase VSR under 
 unbalanced conditions. Their approach involves predicting the future states of the system and optimizing the switching actions
-to minimize voltage deviations and harmonic distortion \cite{wang2015pid}.\par
-Furthermore, The article \cite{jin2018} proposed an MPC with direct power control scheme that incorporates a cost function designed to minimize
+to minimize voltage deviations and harmonic distortion [\cite{wang2015pid}].\par
+Furthermore, The article [\cite{jin2018}] proposed an MPC with direct power control scheme that incorporates a cost function designed to minimize
 both the output voltage error and the switching losses. Their results demonstrate that MPC can achieve superior voltage regulation
-and reduced harmonic content compared to traditional PI controllers, particularly during unbalanced grid events \cite{jin2018}.\par
-The literature indicates that while traditional dual-loop PI control (as described in \cite{song1999}) can handle unbalanced
-grid conditions, it suffers from bandwidth limitations and filtering delays \cite{mirhosseini2013}.
-The proposed thesis topic, applying MPC to this problem, is supported by the work of \cite{kouro2009} and  \cite{vazquez2014},
+and reduced harmonic content compared to traditional PI controllers, particularly during unbalanced grid events [\cite{jin2018}].\par
+The literature indicates that while traditional dual-loop PI control (as described in [\cite{song1999}]) can handle unbalanced
+grid conditions, it suffers from bandwidth limitations and filtering delays [\cite{mirhosseini2013}].
+The proposed thesis topic, applying MPC to this problem, is supported by the work of [\cite{kouro2009}] and  [\cite{vazquez2014}],
 which demonstrates MPC's superior dynamic performance and ability to handle multivariable constraints. By integrating the 
-symmetrical component theories in \cite{paap2000} and the voltage support strategies of \cite{camacho2016} into an MPC framework,
+symmetrical component theories in [\cite{paap2000}] and the voltage support strategies of [\cite{camacho2016}] into an MPC framework,
 the thesis can address the DC-link voltage ripple and power oscillation problems more effectively than legacy methods.
 Overall, the literature indicates that MPC offers significant advantages for controlling active voltage source rectifiers, 
 especially under challenging grid conditions. Its predictive capabilities and optimization framework make it a promising 

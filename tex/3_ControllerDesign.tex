@@ -10,7 +10,7 @@ The control system adopts a cascaded loop structure to separate the fast dynamic
 from the slower dynamics of the DC link capacitor energy. Inner Loop (Current Control): A high-bandwidth
 PI controller (or similar) operating at the switching frequency ($f_{sw} = 20 \text{ kHz}$, $T_{inner} = 50 \mu\text{s}$)
 regulates the AC currents to track references.Outer Loop (MPC): A Model Predictive Controller operates at
-a lower sampling rate ($f_{dc} = 2 \text{ kHz}$, $T_{dc} = 0.5 \text{ms}$) to generate optimal current references
+a lower sampling rate ($f_{dc} = 2 \text{ kHz}$, $T_{dc} = 500 \mu\text{s}$) to generate optimal current references
 ($\mathbf{u}^*$). This multi-rate approach significantly reduces the computational burden of the optimization solver
 while maintaining high-fidelity current tracking.\par
 \section{Current Controller}
@@ -94,9 +94,9 @@ The closed loop transfer function of the system can be derived as in equation [\
 \end{equation}
 To achieve a desired closed loop performance, among the various tuning methods, Internal Model Control (IMC)
 has been used for PI controller tuning for past decades in systems where an approximate model is available.
-This technique allows for adequate tracking and excels in disturbance rejection\cite{Shamsuzzoha2012, artIMCPIDShah}.
+This technique allows for adequate tracking and excels in disturbance rejection[\cite{Shamsuzzoha2012, artIMCPIDShah}].
 The imperfect model should be incorporated as part of the controller design using an explicit model of the plant
-\cite{Shamsuzzoha2012}. This tuning provides robustness to the controller, with the control loop remaining stable
+[\cite{Shamsuzzoha2012}]. This tuning provides robustness to the controller, with the control loop remaining stable
 even if the parameters change substantially from those used for tuning. This is an interesting feature for the real
 implementation of the VSC.\par
 The primary disadvantage of IMC PI tuning is that it sets the PI integral part to be equal to
@@ -142,7 +142,7 @@ can be derived as:
     \label{eq:final_ki}
 \end{equation}
 Once the PI controller gains are determined, they can be implemented in the closed loop transfer function
-    [\ref{eq:final_closed_loop_transfer_function}] to analyze the system performance.obtained from equation
+    [\ref{eq:final_closed_loop_transfer_function}] to analyze the system performance obtained from equation
     [\ref{eq:closed_loop_transfer_function}] to analyze the system performance.
 \begin{equation}
     \begin{split}
@@ -163,7 +163,7 @@ The Model Predictive Controller (MPC) is designed to regulate the DC link voltag
 \begin{figure}[ht]!
     \centering
     \includegraphics[scale=0.6]{img/MPCPrediction&ControlHW.png}
-    \caption{Illustration of Prediction Horizon ($N_p$) and Control Horizon ($N_c$) in MPC \cite{Kaiser_Kutz_Brunton, currie2014practical}}
+    \caption{Illustration of Prediction Horizon ($N_p$) and Control Horizon ($N_c$) in MPC [\cite{Kaiser_Kutz_Brunton, currie2014practical}]}
     \label{fig:MPC_Horizons}
 \end{figure}
 The DC voltage controller is formulated to  balance computational efficiency with control stability, the MPC design decouples
@@ -373,7 +373,7 @@ for embedded implementation due to its heavy reliance on dynamic memory allocati
 libraries. Consequently, the transition to an embedded-compatible solver required selecting an algorithm capable
 of deterministic execution and C-code generation.\par
 Based on the comparative evaluations presented in the jMPC Toolbox documentation and
-literature \cite{currie2014practical}, Wright's Active Set Method ({\fontfamily{qcr}\selectfont quad\_wright}) was
+literature [\cite{currie2014practical}], Wright's Active Set Method ({\fontfamily{qcr}\selectfont quad\_wright}) was
 selected over other common embedded solvers such as Hildreth's Method. While Hildreth's algorithm
 ({\fontfamily{qcr}\selectfont quad\_hildreth}) is noted for its ease of implementation, established benchmarks
 indicate that primal-dual active-set methods like Wright's typically exhibit superior convergence rates for small-to-medium
@@ -399,7 +399,7 @@ which is processed by a PI controller to adjust the estimated angle $\theta$.\pa
 The PLL is designed to minimize the q-axis voltage component $v_{q}$, which ideally should be zero when the estimated
 angle $\theta$ matches the actual grid voltage angle. The PI controller in the PLL adjusts the estimated angle based on
 the error signal, ensuring that the PLL can track changes in the grid voltage angle and frequency accurately.\par
-The PLL is designed to according \cite{PLL7467498, PLLWang2019}
+The PLL is designed to according [\cite{PLL7467498, PLLWang2019}] and the mathematical model of the PLL can be expressed as:
 \begin{equation}
     \begin{split}
         \dot{\omega}  &= \gamma_1 \varepsilon\\

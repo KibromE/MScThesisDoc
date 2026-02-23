@@ -3,7 +3,7 @@
 In chapter three, an Model Predictive controller (MPC) and a PI controller were designed to control
 3-phase active rectifier system. In this chapter, the performance of both controllers will be evaluated
 through simulation results. The simulation is carried out in MATLAB/Simulink environment\footnote{All Models in this thesis can be found in this github page https://github.com/KibromE/MScThesisDoc }, 
-and the system parameters used in the simulation are based on the values shown in Table \ref{tab:system_parameters} 
+and the system parameters used in the simulation are based on the values shown in Table [\ref{tab:system_parameters}] 
 for a 3-phase active rectifier system.\par
 \begin{table}[htbp]
     \centering
@@ -15,7 +15,7 @@ for a 3-phase active rectifier system.\par
         AC Source Voltage (line-line RMS) & $V_{LL}$ & 400 V \\ \hline
         AC Source Frequency & $f$ & 50 Hz \\ \hline
         Input Inductance & $L_{in}$ & 2 mH \\ \hline
-        Input Resistance & $R_{in}$ & 0.1 $\Omega$ \\ \hline
+        Input Resistance & $R_{in}$ & 0.5 $\Omega$ \\ \hline
         DC Link Capacitance & $C_{dc}$ & 1500 $\mu$F \\ \hline
         DC Link Voltage & $V_{dc}$ & 700 V \\ \hline
         Initial DC Link Voltage & $V_{dc,init}$ & 650 V \\ \hline
@@ -24,7 +24,7 @@ for a 3-phase active rectifier system.\par
     \end{tabular}
     \label{tab:system_parameters}
 \end{table}
-The controller parameters used in the simulation are based on the values shown in Table \ref{tab:controller_parameters} which
+The controller parameters used in the simulation are based on the values shown in Table [\ref{tab:controller_parameters}] which
 are selected based on the tuning process described in chapter three. The MPC parameters are chosen to balance the trade-off 
 between control performance and computational complexity, while the inner current loop parameters are selected to ensure stability
 and fast response of the current control loop.\par
@@ -41,15 +41,15 @@ and fast response of the current control loop.\par
         MPC Weighting for Reactive reduction & $\lambda_{Q}$ & 500 \\ \hline
         MPC Weighting for Ripple Suppression & $\lambda_{Rip}$ & 2e6 \\ \hline
         Maximum Control Input Constraint & $u_{max}$ & 50 A \\ \hline
-        Inner Current Loop Proportional Gain & $K_{p,inner}$ & 0.1 \\ \hline
-        Inner Current Loop Integral Gain & $K_{i,inner}$ & 50 \\ \hline
-        Inner Current Loop Bandwidth & $f_{bw,inner}$ & 1000 Hz \\ \hline
-        Inner Current Loop Sampling Time & $T_{s,inner}$ & 10 $\mu$s \\ \hline
-        Outer Voltage Loop Sampling Time & $T_{s,outer}$ & 100 $\mu$s \\ \hline
+        Inner Current Loop Proportional Gain & $K_{p,inner}$ & 25.1572 \\ \hline
+        Inner Current Loop Integral Gain & $K_{i,inner}$ & 6.2893e3 \\ \hline
+        Inner Current Loop time constant & $\tau_{c}$ & 79.5 $\mu$s \\ \hline
+        Inner Current Loop Sampling Time & $T_{s,inner}$ & 50 $\mu$s \\ \hline
+        Outer Voltage Loop Sampling Time & $T_{s,outer}$ & 500 $\mu$s \\ \hline
     \end{tabular}
     \label{tab:controller_parameters}
 \end{table}
-The test scenarios for the simulation are listed in Table \ref{tab:test_scenarios}, which include both balanced and unbalanced 
+The test scenarios for the simulation are listed in Table [\ref{tab:test_scenarios}], which include both balanced and unbalanced 
 grid conditions to evaluate the controllers' performance under different operating conditions.\par
 \begin{table}[htbp]
     \centering
@@ -88,7 +88,7 @@ grid conditions to evaluate the controllers' performance under different operati
 The simulation is conducted for both a linear mathematical model of the system and a nonlinear switching model.
 The linear model is used to evaluate the control performance under ideal conditions, while the nonlinear switching model is used
 to assess the robustness of the controllers under more realistic conditions that include switching effects and non-linearities.\par
-Both models are subjected to various grid conditions, including balanced and unbalanced scenarios listed in Table \ref{tab:test_scenarios},
+Both models are subjected to various grid conditions, including balanced and unbalanced scenarios listed in Table [\ref{tab:test_scenarios}],
 to evaluate and tune the controllers' performance in regulating the DC link voltage and maintaining power quality.\par
 \subsection{Simulation of Linear Mathematical Model}
 Figure [\ref{fig: DC link voltage response linear I}] and [\ref{fig: DC link voltage response linear II}] shows 
