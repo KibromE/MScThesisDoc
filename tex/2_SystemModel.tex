@@ -410,9 +410,11 @@ the dwell times can be derived by projecting the vectors onto the $\alpha$ and $
         T_2 &= \frac{\sqrt{3} \cdot T_s \cdot |\vec{V}_{ref}|}{V_{dc}} \sin(\theta)\\
         T_0 &= T_s - T_1 - T_2\\
     \end{split}
+    \label{eq: dwell timing}
 \end{equation}
 where $\theta$ is the angle of $\vec{V}_{ref}$ relative to the start of the sector ($0 \le \theta \le 60^\circ$).\par
-This calculation generalizes to any sector $n$ by substituting $\theta$ with $\theta' = \theta - (n-1)\frac{\pi}{3}$.\par
+This calculation generalizes to any sector $n$ by substituting $\theta$ in equation (\ref{eq: dwell timing}) 
+with $\theta' = \theta - (n-1)\frac{\pi}{3}$.\par
 \subsection{Switching Sequence}
 To minimize switching losses, the transition from one state to the next is performed by changing the state of only one leg at a time.
 A symmetrical switching sequence is typically employed. For Sector I, the sequence is:
