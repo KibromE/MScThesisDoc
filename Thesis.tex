@@ -8,35 +8,42 @@
   \begin{center}
     \begin{figure}
         \centering
-        \includegraphics[scale=0.5]{img/logo}
+        \includegraphics[scale=0.35]{img/logo}
     \end{figure}
-
+    \vspace{1.5cm}
     \LARGE{\textbf{Model predictive control of active voltage source rectifier's output voltage 
     under unbalanced grid voltage conditions}}\\
-    \vspace{1cm}
+    \vspace{1.5cm}
     \Large{\textbf{Mekelle University\\
             Ethiopian Institute of Technology-Mekelle (EiT-M)\\
             School of Electrical and Computer Engineering\\
-            Control and Instrumentation Chair}}\\
-    \vspace{1cm}
+            Industrial Control Chair}}\\
+    \vspace{1.5cm}
     \large{A Thesis Submitted to Mekelle University, Ethiopian Institute of
             Technology-Mekelle in Partial Fulfillment of the Requirements for the
             Degree of Masters of Science in Electrical Control and Instrumentation
             Engineering}\\
     \vspace{1.5cm}
-    \textbf{\underline{By:}}
-    \hfill
-    \textbf{\underline{Advisor:}} \\
-    \Large{Kibrom Esayas}
-    \hfill
-    \Large{Gebremicheal Te-ame(Dr.-Ing)}
-  \end{center}
+ \end{center}
+    \begin{flushleft}
+        Author: \textbf{Kibrom Esayas}
+    \end{flushleft}
+    \begin{flushleft}
+        Advisor: \textbf{Dr.-Ing. Gebremicheal Te-ame}
+    \end{flushleft}
+    \begin{flushright}
+      \textbf{\today} \\
+    \end{flushright}
+    \begin{flushright}
+      \textbf{Mekelle, Ethiopia}
+    \end{flushright}
     \thispagestyle{empty}
 \end{titlepage}
 \newpage
-\begin{doublespacing}
+\begin{spacing}{1.5}
     \pagenumbering{roman} % i, ii, iii, iv, ...
     \include{tex/0_FrontMatter}
+    \begin{spacing}{.9}
     \tableofcontents
     \addcontentsline{toc}{chapter}{Contents}
     \newpage
@@ -48,6 +55,7 @@
     \listoffigures
     \addcontentsline{toc}{chapter}{List of Figures}
     \renewcommand{\addvspace}[1]{\origaddvspace{#1}}
+    \end{spacing}
     \newpage
     \pagenumbering{arabic} % 1, 2, 3, 4, ...
     \setcounter{page}{1}
@@ -55,8 +63,8 @@
     \include{tex/2_SystemModel}
     \include{tex/3_ControllerDesign}
     \include{tex/4_SimulationResult_Discussion}
+    \clearpage % Flush out floats to avoid float-only pages
     \include{tex/5_Conclusion}
-    
     \newpage
     \appendix
     \include{tex/Appendix}
@@ -65,5 +73,5 @@
       \setlength{\emergencystretch}{1em} % prevent overfull lines in bibliography
       \printbibliography[heading=bibintoc]
     \endgroup
-\end{doublespacing}
+\end{spacing}
 \end{document}
