@@ -18,6 +18,8 @@ partial fulfillment of the requirements for the degree.
         3 & \underline{\hspace{1.5in}}   & \underline{\hspace{1.5in}}          & \underline{\hspace{1in}} \\
           & External Examiner            &           &               \\
         4 & \underline{\hspace{1.5in}}   & \underline{\hspace{1.5in}}          & \underline{\hspace{1in}} \\
+          & Chairperson, School Dean     &           &               \\
+        5 & \underline{\hspace{1.5in}}   & \underline{\hspace{1.5in}}          & \underline{\hspace{1in}} \\
           & Chairperson, Department      &           &               \\
     \end{tabular}
 \end{table}
@@ -38,9 +40,6 @@ material used for this thesis have been duly acknowledged.\par
         Kibrom Esayas & \underline{\hspace{1.5in}}          & \underline{\hspace{1.5in}}
     \end{tabular}
 \end{table}
-This MSc thesis entitled \textbf{“Model predictive control of active voltage source rectifier's
-output voltage under unbalanced grid voltage conditions”} has been submitted for examination 
-with my approval as thesis advisor.
 \begin{table}[H]
     \centering
     \def\arraystretch{2}
@@ -55,36 +54,35 @@ with my approval as thesis advisor.
 \addcontentsline{toc}{chapter}{Acknowledgments}
 First and foremost, I would like to thank God for granting me the strength, and perseverance to successfully
 complete this research and my master's studies. \par
-My deepest gratitude belongs to my beloved parents, Esayas and Tifito. Thank you for your unconditional love, endless patience,
-and the profound sacrifices you have made for my education. Your unwavering support and belief in me over the years have been my
-greatest source of inspiration and strength. I am also deeply grateful to my brothers, Daniel and Eyob, for always standing by
-my side. Thank you for your constant encouragement, understanding, and the continuous support you have given me.\par
 I would also like to express my deepest and most sincere gratitude to my advisor, Gebremicheal Te-ame (Dr.-Ing),
-for his invaluable guidance, constructive feedback, and continuous support throughout this thesis. Special thanks go to my dear
-friends, Mikeyas, Nahusenay, and Yebrah, your exceptional support by providing valuable resources and insights.\par
-Finally, I want to thank everyone at Mekelle University, and all those who, directly or indirectly, contributed to the successful
-completion of this thesis.\par
+for his invaluable guidance, constructive feedback, and continuous support throughout this thesis.\par
+My deepest gratitude belongs to my beloved parents, Esayas and Tifito. Thank you for your unconditional love,
+endless patience, and the profound sacrifices you have made for my education. I am also deeply grateful to my
+brothers, Daniel and Eyob, for always standing by my side.  Special thanks to my dear friends, Mikeyas, 
+Nahusenay, and Ybrah, your exceptional support by providing valuable resources and insights.\par
+Finally, I want to thank everyone at Mekelle University, school of Electrical and Computer Engineering, and all those who,
+directly or indirectly, contributed to the successful completion of this thesis.\par
 
 \newpage
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 This thesis presents a Model Predictive Control (MPC) strategy for a three-phase Active Voltage Source Rectifier (VSR)
-operating under unbalanced and distorted grid conditions. Conventional control methods often struggle to maintain 
+operating under unbalanced grid conditions. Conventional control methods often struggle to maintain 
 power quality during grid faults, leading to significant DC-link voltage ripples and harmonic distortion in the input
 currents. To address these challenges, this research develops a robust control framework that integrates a mathematical
 model of the VSR based on symmetrical sequence decomposition.\par
 The proposed system utilizes a cascaded control structure, employing an outer-loop MPC to regulate the DC-link energy
-and an inner-loop PI controller for precise current tracking. A comprehensive discrete-time prediction model is
+and an inner-loop PI controller for precise current tracking. A discrete-time prediction model is
 derived to forecast the future behavior of the positive and negative sequence components. A specialized cost function
-is designed and minimized to generate optimal control references, specifically targeting the suppression of second-order
-power oscillations (100 Hz ripple) and the mitigation of negative-sequence currents.\par
+is designed to generate optimal control references, specifically targeting the suppression of second-order
+power oscillations of the fundamental frequnecy and the mitigation of negative-sequence currents.\par
 The performance of the proposed controller is validated through extensive simulations in the MATLAB/Simulink environment
-using both linear and nonlinear switching models. Test scenarios include balanced grid conditions and various unbalanced
-fault types. The results demonstrate that the proposed MPC strategy achieves superior DC-link voltage regulation and
-reduced harmonic distortion compared to traditional control methods, effectively ensuring unity power factor and stable
+for both linear and nonlinear switching models. Test scenarios include balanced grid conditions and various unbalanced
+fault types. The results demonstrate that the proposed MPC strategy achieves DC-link voltage regulation and
+reduced harmonic distortion compared to classical control methods, effectively ensuring unity power factor and stable
 operation even under grid unbalance.\par
 \bigskip
 
-\textbf{Keywords:  Active Rectifier, Voltage Source Rectifier (VSR), Model Predictive Control (MPC),
- Unbalanced Grid Conditions, Symmetrical Components}
+\textbf{Keywords: \textit{Model Predictive Control (MPC), Active Rectifier, Voltage Source Rectifier (VSR),
+ Unbalanced Grid Conditions, Symmetrical Components}}
 
