@@ -6,19 +6,17 @@ is of paramount importance. This thesis investigated the adverse effects of unba
 inherently generate negative-sequence currents and induce detrimental 100-Hz power oscillations on the DC-link.\par
 The core contribution of this research lies in the integration of Symmetrical Component Extraction with an
 Model Predictive Control (MPC) algorithm. By mapping the coupled three-phase system into decoupled
-positive and negative sequence networks, an accurate discrete-time prediction model was formulated.
-The controller was designed to regulate the square of the DC-link voltage (energy) to linearize the
-power dynamics. A carefully structured multi-objective cost function was developed to simultaneously
-track the DC energy reference, enforce unity power factor, and suppress second-order active and reactive
-power ripples.\par
+positive and negative sequence networks, an approximate discrete-time prediction model was formulated.
+The controller was designed to regulate the square of the DC-link voltage (energy) by solving a multi-objective
+cost function, which also simultaneously enforce unity power factor, and suppress second-order active and
+reactive power ripples.\par
 The effectiveness of the proposed architecture was rigorously tested against realistic grid fault scenario
-(Math Bollen's Type B, F, and G sags) using a switching nonlinear model in Simulink. The simulation results
-conclusively demonstrated that the proposed controller heavily attenuates the negative-sequence currents and
-stabilizes the DC output. The dynamic response was exceptionally smooth, achieving settling times ranging
-from 127.8 ms to 140.5 ms and limiting voltage overshoots to a maximum of 1.55\% even under the complex
-phase-shifting conditions of Type F and Type G faults. Ultimately, this thesis proves that predictive control,
-when combined with accurate sequence decomposition, offers a highly resilient and fast-acting solution for
-VSRs facing grid asymmetries.\par
+(Math Bollen's Type B, F, and G sags) using both linear mathematical model and nonlinear switching model in
+Simulink. The simulation results conclusively demonstrated that the proposed controller heavily attenuates
+the negative-sequence currents and stabilizes the DC output. But also due to the ideal integrator prediction
+model used in the MPC algorithm, the MPC controller doesn't account for the delay in inner current controller.
+as the result of this it can be observed that an overshoot and small residual oscillations is introduced in
+the step response.\par
 \section{Future Work}
 The findings of this thesis lay a strong foundation for advanced power converter control, opening several
 promising directions for future investigation:
@@ -28,9 +26,10 @@ promising directions for future investigation:
     and unmodeled dynamics, further enhancing robustness and performance. The influence of nonlinearites can be 
     seen in the simulation results, where the nonlinear switching model shows slightly higher overshoots and 
     settling times compared to the linear model.
+    \item \textbf{Experimental Validation:} Implementing the proposed control strategy on a hardware testbed 
+    to validate its performance under real-world conditions, including measurement noise and component non-idealities.
     \item \textbf{Grid Voltage Sensorless Control:} To reduce hardware costs and increase system reliability,
     future iterations of this controller could incorporate advanced observers (such as Extended Kalman Filters) to
     estimate the grid voltages and sequence components, eliminating the need for physical AC voltage sensors.
-    \item \textbf{Experimental Validation:} Implementing the proposed control strategy on a hardware testbed 
-    to validate its performance under real-world conditions, including measurement noise and component non-idealities.
+
 \end{itemize}
