@@ -1,13 +1,13 @@
-\chapter{Simulation Result \& Discussion}\label{SimulationResult}
+\chapter{Simulation Result and Discussion}\label{SimulationResult}
 \section{Introduction}
 In chapter three, an Model Predictive controller (MPC) and a PI controller were designed to control
 3-phase active rectifier system. In this chapter, the performance of both controllers will be evaluated
-through simulation results. The simulation is carried out in MATLAB/Simulink environment\footnote{All Models in this thesis can be found in this github page https://github.com/KibromE/MScThesisDoc }, 
-and the system parameters used in the simulation are based on the values shown in Table [\ref{tab:system_parameters}] 
+through simulation results. The simulation is carried out in MATLAB/Simulink environment\footnote{All Models in this thesis can be found in this github page https://github.com/KibromE/ThesisSimulation }, 
+and the system parameters used in the simulation are based on the values shown in Table \ref{tab:system_parameters}
 for a 3-phase active rectifier system.\par
 \begin{table}[htbp]
     \centering
-    \caption{System Parameters of 3-Phase Active Rectifier}
+    \caption{System Parameters of 3-Phase Active Rectifier \cite{Saadaoui2026}}
     \begin{tabular}{|l|c|c|}
         \hline
         \textbf{Parameter} & \textbf{Symbol} & \textbf{ Value} \\ \hline
@@ -24,7 +24,7 @@ for a 3-phase active rectifier system.\par
     \end{tabular}
     \label{tab:system_parameters}
 \end{table}
-The controller parameters used in the simulation are based on the values shown in Table [\ref{tab:controller_parameters}] which
+The controller parameters used in the simulation are based on the values shown in Table \ref{tab:controller_parameters} which
 are selected based on the tuning process described in chapter three. The MPC parameters are chosen to balance the trade-off 
 between control performance and computational complexity, while the inner current loop parameters are selected to ensure stability
 and fast response of the current control loop.\par
@@ -49,12 +49,12 @@ and fast response of the current control loop.\par
     \end{tabular}
     \label{tab:controller_parameters}
 \end{table}
-The test scenarios for the simulation are listed in Table [\ref{tab:test_scenarios}], which include both balanced and unbalanced 
+The test scenarios for the simulation are listed in Table \ref{tab:test_scenarios}, which include both balanced and unbalanced 
 grid conditions to evaluate the controllers' performance under different operating conditions.\par
 \begin{table}[htbp]
     \centering
     \caption{Test Scenarios for Simulation}
-\begin{tabular}{|l|p{7.5cm}|m{3.5cm}|}
+\begin{tabular}{|m{3.5cm}|m{7cm}|m{3.5cm}|}
         \hline
         \textbf{Test Scenario} & \textbf{Description} & \textbf{Voltage (V)}\\ \hline
         Balanced Grid  & All three phases have equal voltage magnitudes and are 120 degrees apart in phase. & 
@@ -84,48 +84,53 @@ grid conditions to evaluate the controllers' performance under different operati
     \end{tabular}
     \label{tab:test_scenarios}
 \end{table}
+\newpage
 \section{Simulation Results}
 The simulation is conducted for both a linear mathematical model of the system and a nonlinear switching model.
 The linear model is used to evaluate the control performance under ideal conditions, while the nonlinear switching model is used
 to assess the robustness of the controllers under more realistic conditions that include switching effects and non-linearities.\par
-Both models are subjected to various grid conditions, including balanced and unbalanced scenarios listed in Table [\ref{tab:test_scenarios}],
+Both models are subjected to various grid conditions, including balanced and unbalanced scenarios listed in Table \ref{tab:test_scenarios},
 to evaluate and tune the controllers' performance in regulating the DC link voltage and maintaining power quality.\par
 \subsection{Simulation of Linear Mathematical Model}
-Figure [\ref{fig: DC link voltage response linear I}] and [\ref{fig: DC link voltage response linear II}] shows 
+Figure \ref{fig: DC link voltage response linear I}, \ref{fig: DC link voltage response linear II}, 
+\ref{fig: DC link voltage response linear III}, and \ref{fig: DC link voltage response linear IV} show 
 the DC link voltage response for the linear mathematical model under different grid conditions. The results indicate
 that the controllers are able to regulate the DC link voltage effectively under both balanced and unbalanced grid
 conditions, with minimal overshoot and fast settling times. The DC link voltage remains stable and close to the 
 reference value of 700 V in all scenarios, demonstrating the effectiveness of the control strategy in maintaining
 voltage regulation despite variations in the input voltage due to unbalanced grid conditions.\par
-\begin{figure}[htbp]
+
+\begin{figure}[ht]
     \centering
-    \subfloat[balanced input DC voltage]{
-        \includegraphics[width=0.9\textwidth]{img/balanced_voltage_Vdc_Linear.png}
-        \label{subfig:a balanced voltage input DC link voltage linear}}
-    \\
-    \subfloat[TypeG unbalanced input DC voltage]{
-        \includegraphics[width=0.9\textwidth]{img/TypeG_voltage_Vdc_Linear.png}
-        \label{subfig:b Type G voltage input DC link voltage linear}}
-    \caption{DC link voltage response for linear mathematical model under different grid conditions I}
+    \includegraphics[width=0.9\textwidth]{img/balanced_voltage_Vdc_Linear.png}
+    \caption{DC link voltage response under balanced input DC voltage}
     \label{fig: DC link voltage response linear I}
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[ht]
     \centering
-    \subfloat[TypeF unbalanced input DC voltage]{
-        \includegraphics[width=0.9\textwidth]{img/TypeF_voltage_Vdc_Linear.png}
-        \label{subfig:c Type F voltage input DC link voltage linear}}
-    \\
-    \subfloat[TypeB unbalanced input DC voltage]{
-        \includegraphics[width=0.9\textwidth]{img/TypeB_voltage_Vdc_Linear.png}
-        \label{subfig:d Type B voltage input DC link voltage linear}}
-    \caption{DC link voltage response for linear mathematical model under different grid conditions II}
+    \includegraphics[width=0.9\textwidth]{img/TypeG_voltage_Vdc_Linear.png}
+    \caption{DC link voltage response under Type G unbalanced input DC voltage}
     \label{fig: DC link voltage response linear II}
 \end{figure}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/TypeF_voltage_Vdc_Linear.png}
+    \caption{DC link voltage response under Type F unbalanced input DC voltage}
+    \label{fig: DC link voltage response linear III}
+\end{figure}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/TypeB_voltage_Vdc_Linear.png}
+    \caption{DC link voltage response under Type B unbalanced input DC voltage}
+    \label{fig: DC link voltage response linear IV}
+\end{figure}
+\clearpage
 \subsection{Simulation of Nonlinear Switching Model}
-Figure [\ref{fig: Balanced grid with step change I}], and [\ref{fig: Balanced grid with step change II}]
-show the simulation results for the balanced grid scenario, where the voltage input is balanced and the controllers are expected to
-maintain a stable DC link voltage while ensuring proper current alignment with the voltage. The control system regulates the DC link
-voltage with a $1.23 \%$ overshoot and settles within $127.5 ms$.\par
+Figure \ref{fig: Balanced grid with step change I} show the simulation results for the
+balanced grid scenario, where the voltage input is balanced and the controllers are expected to
+maintain a stable DC link voltage while ensuring proper current alignment with the voltage.
+The control system regulates the DC link voltage with a $1.23 \%$ overshoot and settles within
+$127.5 ms$ during a step change of reference voltage from 650 V to 700 V at t = 0.1 s.\par
 
     %     RiseTime: 0.0027
     % SettlingTime: 0.1275
@@ -135,9 +140,53 @@ voltage with a $1.23 \%$ overshoot and settles within $127.5 ms$.\par
     %   Undershoot: 0
     %         Peak: 708.6181
     %     PeakTime: 0.1052
-Figures [\ref{fig: Type G grid with step change I}], [\ref{fig: Type G grid with step change II}], and [\ref{fig: Type G grid with step change III}] show 
-the simulation results for the Type G unbalanced grid scenario. The controllers are expected to maintain a stable DC link voltage while compensating
-for the unbalanced voltage input. The control system regulates the DC link voltage with a $1.54 \%$ overshoot and settles within $140.5 ms$.\par
+\begin{figure}[htb]
+    \centering
+    \subfloat[balanced voltage input in abc frame]{
+        \includegraphics[width=0.9\linewidth]{img/balanced_voltage_abc.png}
+        \label{subfig:a balanced voltage input abc}}
+        \\
+    \subfloat[input current in abc frame]{
+        \includegraphics[width=0.9\linewidth]{img/balanced_current_abc.png}
+        \label{subfig:b balanced current input abc}}
+        \\
+    \caption{Balanced grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (I)}
+    \label{fig: Balanced grid with step change I}
+\end{figure}
+\begin{figure}[htbp]
+    \ContinuedFloat
+    \centering
+    \subfloat[voltage and current alignment in abc frame]{
+        \includegraphics[width=0.85\linewidth]{img/balanced_current_voltage_a.png}
+        \label{subfig:c balanced voltage and current alignment abc}}
+    \\
+    \subfloat[balanced voltage input in dq frame]{
+        \includegraphics[width=0.9\linewidth]{img/balanced_voltage_dq.png}
+        \label{subfig:a balanced voltage input dq}}
+    \\
+    \subfloat[input current in dq frame]{
+        \includegraphics[width=0.9\linewidth]{img/balanced_current_dq.png}
+        \label{subfig:b balanced current input dq}}
+    \\
+    \caption{Balanced grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (II)}
+    \label{fig: Balanced grid with step change II}
+\end{figure}
+\begin{figure}[ht]
+    \ContinuedFloat
+    \centering
+    \subfloat[DC link voltage response]{
+        \includegraphics[width=0.9\linewidth]{img/balanced_voltage_Vdc.png}
+        \label{subfig:c balanced DC link voltage response}}
+    \\
+    \caption{Balanced grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (III)}
+    \label{fig: Balanced grid with step change III}
+\end{figure}
+\newpage
+Figures \ref{fig: Type G grid with step change I} show the simulation results for the Type G
+unbalanced grid scenario. The controllers are expected to maintain a stable DC link voltage
+while compensating for the unbalanced voltage input and maintaining unity power factor.
+The control system regulates the DC link voltage with a $1.54 \%$ overshoot and settles
+within $140.5 ms$ during a step change of reference voltage from 650 V to 700 V at t = 0.1 s.\par
     
     %     RiseTime: 0.0034
     % SettlingTime: 0.1405
@@ -147,89 +196,38 @@ for the unbalanced voltage input. The control system regulates the DC link volta
     %   Undershoot: 0
     %         Peak: 710.7734
     %     PeakTime: 0.1060
-Figures [\ref{fig: Type F grid with step change I}], [\ref{fig: Type F grid with step change II}], and [\ref{fig: Type F grid with step change III}] show
-the simulation results for the Type F unbalanced grid scenario. The controllers are expected to maintain a stable DC link voltage while compensating
-for the unbalanced voltage input. The control system regulates the DC link voltage with a $1.55 \%$ overshoot and settles within $133 ms$.\par
-    
-    %     RiseTime: 0.0040
-    % SettlingTime: 0.1330
-    %  SettlingMin: 690.9727
-    %  SettlingMax: 710.8640
-    %    Overshoot: 1.5520
-    %   Undershoot: 0
-    %         Peak: 710.8640
-    %     PeakTime: 0.1066
-Figures [\ref{fig: Type B grid with step change I}], [\ref{fig: Type B grid with step change II}], and [\ref{fig: Type B grid with step change III}] show
-the simulation results for the Type B unbalanced grid scenario. The controllers are expected to maintain a stable DC link voltage while compensating
-for the unbalanced voltage input. The control system regulates the DC link voltage with a $0.95 \%$ overshoot and settles within $127.8 ms$.\par
-
-    %     RiseTime: 0.0031
-    % SettlingTime: 0.1278
-    %  SettlingMin: 691.5491
-    %  SettlingMax: 706.8367
-    %    Overshoot: 0.9767
-    %   Undershoot: 0
-    %         Peak: 706.8367
-    %     PeakTime: 0.1058
-\begin{figure}[htbp]
-    \centering
-    \subfloat[balanced voltage input in abc frame]{
-        \includegraphics[width=0.85\linewidth]{img/balanced_voltage_abc.png}
-        \label{subfig:a balanced voltage input abc}}
-        \\
-    \subfloat[input current in abc frame]{
-        \includegraphics[width=0.85\linewidth]{img/balanced_current_abc.png}
-        \label{subfig:b balanced current input abc}}
-        \\
-    \subfloat[voltage and current alignment in abc frame]{
-        \includegraphics[width=0.85\linewidth]{img/balanced_current_voltage_a.png}
-        \label{subfig:c balanced voltage and current alignment abc}}
-    \\
-    \caption{Balanced grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (I)}
-    \label{fig: Balanced grid with step change I}
-\end{figure}
-\begin{figure}[htbp]
-    \centering
-    \subfloat[balanced voltage input in dq frame]{
-        \includegraphics[width=0.85\linewidth]{img/balanced_voltage_dq.png}
-        \label{subfig:a balanced voltage input dq}}
-    \\
-    \subfloat[input current in dq frame]{
-        \includegraphics[width=0.85\linewidth]{img/balanced_current_dq.png}
-        \label{subfig:b balanced current input dq}}
-    \\
-    \subfloat[DC link voltage response]{
-        \includegraphics[width=0.85\linewidth]{img/balanced_voltage_Vdc.png}
-        \label{subfig:c balanced DC link voltage response}}
-    \\
-    \caption{Balanced grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (II)}
-    \label{fig: Balanced grid with step change II}
-\end{figure}
-\newpage
-\begin{figure}[htbp]
+\vspace{1cm}
+\begin{figure}[hbp]
     \centering
     \subfloat[unbalanced voltage input in abc frame]{
-        \includegraphics[width=0.85\linewidth]{img/TypeG_voltage_abc.png}
+        \includegraphics[width=0.9\linewidth]{img/TypeG_voltage_abc.png}
         \label{subfig:a Type G voltage input abc}}
-    \\
-    \subfloat[positive sequence voltage in abc frame]{
-        \includegraphics[width=0.85\linewidth]{img/TypeG_voltage_pos_abc.png}
-        \label{subfig:b Type G voltage input positive abc }
-    }\\
-    \subfloat[negative sequence voltage in abc frame]{
-        \includegraphics[width=0.85\linewidth]{img/TypeG_voltage_neg_abc.png}
-        \label{subfig:c Type G voltage input negative abc}}
     \\
     \caption{Type G grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (I)}
     \label{fig: Type G grid with step change I}
 \end{figure}
 \begin{figure}[htbp]
+    \ContinuedFloat
     \centering
+    \subfloat[positive sequence voltage in abc frame]{
+        \includegraphics[width=0.9\linewidth]{img/TypeG_voltage_pos_abc.png}
+        \label{subfig:b Type G voltage input positive abc }
+    }\\
+    \subfloat[negative sequence voltage in abc frame]{
+        \includegraphics[width=0.9\linewidth]{img/TypeG_voltage_neg_abc.png}
+        \label{subfig:c Type G voltage input negative abc}}
+    \\
         \subfloat[input current in abc frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeG_current_abc.png}
         \label{subfig:a Type G current input abc }}
     \\
-        \subfloat[positive sequence current in abc frame]{
+    \caption{Type G grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (II)}
+    \label{fig: Type G grid with step change II}
+\end{figure}
+\begin{figure}[htbp]
+    \ContinuedFloat
+    \centering
+    \subfloat[positive sequence current in abc frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeG_current_pos_abc.png}
         \label{subfig:b Type G current input positive abc}}
     \\
@@ -237,15 +235,16 @@ for the unbalanced voltage input. The control system regulates the DC link volta
         \includegraphics[width=0.85\linewidth]{img/TypeG_current_neg_abc.png}
         \label{subfig:c Type G current input negative abc }}
     \\
-    \caption{Type G grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (II)}
-    \label{fig: Type G grid with step change II}
-\end{figure}
-\begin{figure}[htbp]
-    \centering
     \subfloat[input current in dq frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeG_current_dq.png}
         \label{subfig:a Type G current input dq}}
     \\
+    \caption{Type G grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (III)}
+    \label{fig: Type G grid with step change III}
+\end{figure}
+\begin{figure}[ht]
+    \ContinuedFloat
+    \centering
     \subfloat[voltage and current alignment in abc frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeG_current_voltage_a.png}
         \label{subfig:b Type G voltage and current alignment abc}}
@@ -254,11 +253,25 @@ for the unbalanced voltage input. The control system regulates the DC link volta
         \includegraphics[width=0.85\linewidth]{img/TypeG_voltage_Vdc.png}
         \label{subfig:c Type G DC link voltage response}}
     \\
-    \caption{Type G grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (III)}
-    \label{fig: Type G grid with step change III}
+    \caption{Type G grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (IV)}
+    \label{fig: Type G grid with step change IV}
 \end{figure}
-\newpage
-\begin{figure}[htbp]
+\vspace{3cm}
+Figures \ref{fig: Type F grid with step change I} show the simulation results for the Type F
+unbalanced grid scenario. The controllers are expected to maintain a stable DC link voltage
+while compensating for the unbalanced voltage input and maintaining unity power factor.
+The control system regulates the DC link voltage with a $1.55 \%$ overshoot and settles
+within $133 ms$ during a step change of reference voltage from 650 V to 700 V at t = 0.1 s.\par
+\vspace{5cm}
+    %     RiseTime: 0.0040
+    % SettlingTime: 0.1330
+    %  SettlingMin: 690.9727
+    %  SettlingMax: 710.8640
+    %    Overshoot: 1.5520
+    %   Undershoot: 0
+    %         Peak: 710.8640
+    %     PeakTime: 0.1066
+\begin{figure}[H]
     \centering
     \subfloat[unbalanced voltage input in abc frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeF_voltage_abc.png}
@@ -276,6 +289,7 @@ for the unbalanced voltage input. The control system regulates the DC link volta
     \label{fig: Type F grid with step change I}
 \end{figure}
 \begin{figure}[htbp]
+    \ContinuedFloat
     \centering
         \subfloat[input current in abc frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeF_current_abc.png}
@@ -293,6 +307,7 @@ for the unbalanced voltage input. The control system regulates the DC link volta
     \label{fig: Type F grid with step change II}
 \end{figure}
 \begin{figure}[htbp]
+    \ContinuedFloat
     \centering
     \subfloat[input current in dq frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeF_current_dq.png}
@@ -309,8 +324,22 @@ for the unbalanced voltage input. The control system regulates the DC link volta
     \caption{Type F grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (III)}
     \label{fig: Type F grid with step change III}
 \end{figure}
-\newpage
-\begin{figure}[htbp]
+Figures \ref{fig: Type B grid with step change I} show the simulation results for the Type B 
+unbalanced grid scenario. The controllers are expected to maintain a stable DC link voltage
+while compensating for the unbalanced voltage input and maintaining unity power factor.
+The control system regulates the DC link voltage with a $0.95 \%$ overshoot and settles
+within $127.8 ms$ during a step change of reference voltage from 650 V to 700 V at t = 0.1 s.\par
+    %     RiseTime: 0.0031
+    % SettlingTime: 0.1278
+    %  SettlingMin: 691.5491
+    %  SettlingMax: 706.8367
+    %    Overshoot: 0.9767
+    %   Undershoot: 0
+    %         Peak: 706.8367
+    %     PeakTime: 0.1058
+
+\vspace{2cm}
+\begin{figure}[H]
     \centering
     \subfloat[unbalanced voltage input in abc frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeB_voltage_abc.png}
@@ -320,44 +349,112 @@ for the unbalanced voltage input. The control system regulates the DC link volta
         \includegraphics[width=0.85\linewidth]{img/TypeB_voltage_pos_abc.png}
         \label{subfig:b Type B voltage input positive abc }
     }\\
-    \subfloat[negative sequence voltage in abc frame]{
-        \includegraphics[width=0.85\linewidth]{img/TypeB_voltage_neg_abc.png}
-        \label{subfig:c Type B voltage input negative abc}}
-    \\
     \caption{Type B grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (I)}
     \label{fig: Type B grid with step change I}
 \end{figure}
+\vspace{1.5cm}
 \begin{figure}[htbp]
+    \ContinuedFloat
     \centering
+        \subfloat[negative sequence voltage in abc frame]{
+        \includegraphics[width=0.85\linewidth]{img/TypeB_voltage_neg_abc.png}
+        \label{subfig:c Type B voltage input negative abc}}
+    \\
         \subfloat[input current in abc frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeB_current_abc.png}
-        \label{subfig:a Type B current input abc }}
+        \label{subfig:d Type B current input abc }}
     \\
         \subfloat[positive sequence current in abc frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeB_current_pos_abc.png}
-        \label{subfig:b Type B current input positive abc}}
-    \\
-    \subfloat[negative sequence current in abc frame]{
-        \includegraphics[width=0.85\linewidth]{img/TypeB_current_neg_abc.png}
-        \label{subfig:c Type B current input negative abc }}
+        \label{subfig:e Type B current input positive abc}}
     \\
     \caption{Type B grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (II)}
     \label{fig: Type B grid with step change II}
 \end{figure}
 \begin{figure}[htbp]
+    \ContinuedFloat
     \centering
+        \subfloat[negative sequence current in abc frame]{
+        \includegraphics[width=0.85\linewidth]{img/TypeB_current_neg_abc.png}
+        \label{subfig:f Type B current input negative abc }}
+    \\
     \subfloat[input current in dq frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeB_current_dq.png}
-        \label{subfig:a Type B current input dq}}
+        \label{subfig:g Type B current input dq}}
     \\
     \subfloat[voltage and current alignment in abc frame]{
         \includegraphics[width=0.85\linewidth]{img/TypeB_current_voltage_a.png}
-        \label{subfig:b Type B voltage and current alignment abc}}
-    \\
-    \subfloat[DC link voltage response]{
-        \includegraphics[width=0.85\linewidth]{img/TypeB_voltage_Vdc.png}
-        \label{subfig:c Type B DC link voltage response}}
+        \label{subfig:h Type B voltage and current alignment abc}}
     \\
     \caption{Type B grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (III)}
     \label{fig: Type B grid with step change III}
 \end{figure}
+\begin{figure}[H]
+    \ContinuedFloat
+    \centering
+    \subfloat[DC link voltage response]{
+        \includegraphics[width=0.85\linewidth]{img/TypeB_voltage_Vdc.png}
+        \label{subfig:i Type B DC link voltage response}}
+    \caption{Type B grid with step change of $V_{DC}$ from 650 V to 700 V at t = 0.1 s (IV)}
+    \label{fig: Type B grid with step change IV}
+\end{figure}
+From the simulation results, it can be observed that the controllers are able to maintain a stable DC link voltage
+under all test conditions. The power quality is also maintained with low THD in
+the input currents and a power factor close to unity, indicating effective compensation for the unbalanced grid
+conditions. The detailed performance metrics for each test scenario are summarized in Table \ref{tab:performance_summary}.\par
+\begin{table}[htbp]
+    \centering
+    \caption{Summary of system response and power quality of simulation}
+    \begin{tabular}{|m{4cm}|m{5.5cm}|m{4.5cm}|}
+        \hline
+        \textbf{Test Scenario} & \textbf{System Response} & \textbf{Power quality}\\ \hline
+        Balanced Grid  & \begin{tabitemize}
+            \item Overshoot = 1.23 \%
+            \item Rise time = 2.7 ms
+            \item Settling time = 127.5 ms
+        \end{tabitemize} & 
+        \begin{tabitemize}
+            \item THD $i_a$ = 3.41 \%
+            \item THD $i_b$ = 3.15 \%
+            \item THD $i_c$ = 3.09 \%
+            \item Power factor = 1
+        \end{tabitemize} \\ \hline
+        Type G Unbalanced  & 
+        \begin{tabitemize}
+            \item Overshoot = 1.54 \%
+            \item Rise time = 3.4 ms
+            \item Settling time = 140.5 ms
+        \end{tabitemize} & 
+        \begin{tabitemize}
+            \item THD $i_a$ = 3.47 \%
+            \item THD $i_b$ = 2.70 \%
+            \item THD $i_c$ = 3.09 \%
+            \item Power factor = 1
+        \end{tabitemize} \\ \hline
+        Type F Unbalanced  & 
+        \begin{tabitemize}
+            \item Overshoot = 1.55 \%
+            \item Rise time = 4 ms
+            \item Settling time = 133 ms
+        \end{tabitemize} & 
+        \begin{tabitemize}
+            \item THD $i_a$ = 3.16 \%
+            \item THD $i_b$ = 3.35 \%
+            \item THD $i_c$ = 3.11 \%
+            \item Power factor = 1
+        \end{tabitemize} \\ \hline
+        Type B Unbalanced  & 
+        \begin{tabitemize}
+            \item Overshoot = 0.95 \%
+            \item Rise time = 3.1 ms
+            \item Settling time = 127.8 ms
+        \end{tabitemize} & 
+        \begin{tabitemize}
+            \item THD $i_a$ = 3.29 \%
+            \item THD $i_b$ = 3.24 \%
+            \item THD $i_c$ = 3.32 \%
+            \item Power factor = 1
+        \end{tabitemize} \\ \hline
+    \end{tabular}
+    \label{tab:performance_summary}
+\end{table}
