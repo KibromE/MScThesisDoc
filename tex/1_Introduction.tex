@@ -1,38 +1,37 @@
 \chapter{Introduction}
 \section{Background}
-Power electronic converters are an electrical circuit that convert electrical energy
-from on level of voltage/current/frequency to another using a semiconductor based 
+Power electronic converters are electrical circuit that convert electrical energy
+from one level of voltage/current/frequency to another using a semiconductor-based 
 electronic switches and energy storage components \cite{holmes2003pulse,mohan2003power,
 rodriguez2012predictive}. As the demand for expansion of renewable energy and high efficiency
 energy conversion is growing, power electronic systems are widely being used to process
-the available power to meet load requirements. For this reason, a Three-Phase AC/DC active
+the available power to meet load requirements. For this reason, a Three-phase AC/DC active
 rectifier has been gaining momentum in high power electric vehicles (EV) charging stations,
 renewable energy generation, industrial motor control and power supplies.\par
 Traditionally, rectifiers based on diodes and thyristors are able to provide uncontrolled
 and controlled DC Output respectively. But both converters have low power factor, 
 non-sinusoidal input current, high input harmonic distortion and low-frequency voltage 
-ripple in the output side which requirements large filters in both AC and DC sides, However
-those filters are very costly and bulky. With the development self-commutating power electronic
+ripple in the output side which requires large filters in both AC and DC sides, However
+those filters are very costly and bulky. With the development of self-commutating power electronic
 devices (MOSFET, IGBT and GTO etc.) many topologies have developed to overcome the shortcomings 
 of the conventional converters, such as multilevel, multipulse, boost, buck, PFC etc.
 \cite{articleKolarI,articleKolarII,ReviewSafayatullah,batteries9030150}. Among the
-improved power converters, a Pulse Width Modulation (PWM) based power converters preferred for 
-their high efficiency.\par
-The three phase two level boost rectifier shown in Figure \ref{fig:topology} is a PWM controlled,
-low-cost, well-known and robust topology consisting of six active switches, a DC link capacitor and 
+improved power converters, PWM based power converters are preferred for their high efficiency.\par
+The Three-phase two level boost rectifier shown in Figure \ref{fig:topology} is a PWM controlled,
+low-cost, well-known and robust topology consisting of six active switches, a DC-link capacitor and 
 three AC side inductors with continuous input current, bidirectional power flow capability and 
 nearly unity power factor performance. Since the output of the rectifier has a stiff DC voltage source
 characteristic, it is called a voltage source rectifier(VSR).
 \begin{figure}[ht]
     \centering
     \includegraphics[scale=0.45]{img/twolevelvsctopology.PNG}
-    \caption{Basic topology of three phase two level VSR}
+    \caption{Basic topology of Three-phase two level VSR}
     \label{fig:topology}
 \end{figure}
 \section{Literature review}
 \subsection{Introduction to Active Voltage Source Rectifiers}
 To establish the hardware context of the thesis, it is essential to understand the topologies available 
-for three-phase active voltage source rectifiers. The literature in \cite{friedli2014} provide a comprehensive
+for Three-phase active voltage source rectifiers. The literature in \cite{electronics12112417,Abo-Khalil2021,friedli2014} provides a comprehensive
 comparative evaluation of active rectifiers, categorizing them into boost-type and buck-type systems. 
 They highlight that boost-type rectifiers, such as the six-switch boost-type and the VIENNA rectifier, 
 are widely used for industrial applications requiring controlled DC output voltage and sinusoidal input currents. 
@@ -43,19 +42,19 @@ boost-type rectifier remains a robust standard for bidirectional power flow capa
 Before introducing Model Predictive Control (MPC), it is necessary to review traditional linear control methods 
 used to mitigate unbalance. The research in \cite{song1999} addresses the issue where voltage unbalance causes $2\omega$ 
 ripples in the DC-link voltage and increases reactive power. They proposed a dual current control scheme using two 
-synchronous reference frames (SRF): one rotating counter-clockwise for the positive sequence and one clockwise for 
-the negative sequence. By filtering out the oscillating components in each frame, they achieved constant DC-link 
+synchronous reference frames (SRF): one rotating counter-clockwise for the Positive-sequence and one clockwise for 
+the Negative-sequence. By filtering out the oscillating components in each frame, they achieved constant DC-link 
 voltage regulation without increasing control gains to dangerous levels \cite{song1999}.\par
 Though Proportional-Integral (PI) controllers are simple, effective, and linear, but they face stability issues
-under dynamic fault conditions. The study in \cite{mirhosseini2013} discuss the stability restrictions of PI 
+under dynamic fault conditions. The study in \cite{mirhosseini2013} discusses the stability restrictions of PI 
 parameters when using Moving Average Filters (MAF) to extract sequence components. The delay introduced by
 filtering techniques slows down the dynamic response of the system, creating a tradeoff between stability regions
 and fast dynamic performance. They suggest that alternative controllers, such as Proportional-Resonant (PR) or MPC,
 may offer faster dynamics \cite{mirhosseini2013}.\par
 The research conducted by Camacho et al. in \cite{camacho2016} explores strategies to maximize voltage support during 
-grid faults. They developed optimal solutions to maximize positive sequence voltage or minimize negative sequence
+grid faults. They developed optimal solutions to maximize the Positive-sequence voltage or minimize the Negative-sequence
 voltage while injecting maximum rated current. Their work highlights that optimal power reference generation depends
-heavily on the grid impedance ($L/R$ ratio) \cite{camacho2016}. Similarly, The article \cite{alathamneh2022} proposed
+heavily on the grid impedance ($L/R$ ratio) \cite{camacho2016}. Similarly, The article \cite{alathamneh2022} proposes
 a method using time-domain symmetrical component extraction to balance grid currents and eliminate power oscillations,
 thereby stabilizing the DC-link voltage.\par
 \subsection{Model Predictive Control of Active Voltage Source Rectifiers}
@@ -65,53 +64,53 @@ provide a comprehensive overview of MPC applications in power electronics, highl
 future system behavior and optimize control actions accordingly. They emphasize that MPC can effectively manage
 the nonlinearities and constraints inherent in power electronic systems.\par
 Specifically for active voltage source rectifiers, MPC has been shown to improve performance under unbalanced grid conditions. 
-Wang et al. \cite{wang2015pid} explores an MPC strategy that directly controls the output voltage of a three-phase VSR under 
+Wang et al. \cite{wang2015pid} explores an MPC strategy that directly controls the output voltage of a Three-phase VSR under 
 unbalanced conditions. Their approach involves predicting the future states of the system and optimizing the switching actions
-to minimize voltage deviations and harmonic distortion \cite{wang2015pid}. The study conducted in \cite{jin2018} proposed
+to minimize voltage deviations and harmonic distortion \cite{wang2015pid}. The studies conducted in \cite{artWangMPC,jin2018,articleKouro,articleVazquez} proposed
 an MPC with direct power control scheme that incorporates a cost function designed to minimize both the output voltage error
 and the switching losses. Their results demonstrate that MPC can achieve superior voltage regulation and reduced harmonic
-content compared to classical PI controllers, particularly during unbalanced grid events \cite{jin2018}; while both suffer
+content compared to classical PI controllers, particularly during unbalanced grid events \cite{artWangMPC}; while both suffer
 variable switching frequency.\par
-As indicated above, the extensive research on classical dual-loop controllers and advanced predictive techniques, a 
+Despite extensive research done on classical dual-loop controllers and advanced predictive techniques, a 
 significant gap remains in efficiently mitigating severe grid unbalances without compromising dynamic response and
 maintain constant switch frequency. classical linear control schemes, such as dual current control using
 PI controllers \cite{song1999}, heavily rely on filtering techniques (e.g.,notch or Moving Average Filters)
-to extract sequence components. These filters inherently introduce delays that slow down the dynamic response \cite{mirhosseini2013}.
+to extract sequence components. These filters inherently introduce delays that slow down the dynamic response \cite{mirhosseini2013,articleCichowlas}.
 While Model Predictive Control (MPC) is proven to offer superior dynamic performance and the ability to seamlessly handle multivariable
 constraints, its specific application to mitigating DC-link voltage ripples through a discrete-time prediction model based on
 Symmetrical Sequence Decomposition remains insufficiently explored. Therefore, there is a clear need for a robust control architecture
 that leverages MPC to directly optimize both positive and negative sequence components, thereby eliminating the sluggishness of
-classical filters while maintaining highly regulated DC output and unity power factor during asymmetrical grid faults.\par
+classical filters while maintaining highly regulated DC output and near unity power factor during asymmetrical grid faults.\par
 \section{Statement of the problem}
 Under practical operating conditions, power grids frequently experience asymmetrical faults that severely degrade the performance
-and reliability of three-phase Active Voltage Source Rectifiers (VSRs). The negative sequence components causes an even harmonic 
-ripple at twice the fundamental grid frequency in the DC link voltage. This continuous fluctuation prevents a stiff 
+and reliability of Three-phase Active Voltage Source Rectifiers (VSRs). The negative sequence components causes an even harmonic 
+ripple at twice the fundamental grid frequency in the DC-link voltage. This continuous fluctuation prevents a stiff 
 DC output and directly leads to higher harmonic distortion in the input AC currents. Because classical linear PI controllers suffer
 from bandwidth limitations, the fundamental problem addressed in this research is how to design a robust predictive control framework
 capable of decoupling these sequence components, proactively suppressing the second-order power oscillations, and maintaining strict
 DC-link voltage regulation during severe grid unbalances.\par
 \section{Objective}
 \subsection{General Objective}
-The main objective of this thesis is to design a Model Predictive Control (MPC) strategy for a three-phase active VSR by controlling
+The main objective of this thesis is to design a Model Predictive Control (MPC) strategy for a Three-phase active VSR by controlling
 separately the positive and negative sequence components in to achieve regulated output voltage and suppress harmonic ripples under
 unbalanced grid voltage conditions. 
 \subsection{Specific Objectives}
 The specific objectives to achieve the general objective of this thesis are to:
 \begin{itemize}
-    \item Adopt a mathematical model for the three phase active voltage source rectifier.
-    \item Design an internal PI current controller.
+    \item Adopt a mathematical model for the Three-phase active voltage source rectifier.
+    \item Design and tune an inner-loop PI current controller.
     \item Develop a discretized Prediction Model.
-    \item Design of cost function structure and select weighting factors.
+    \item Design the MPC cost function and determine appropriate weighting factors.
     \item Simulate the control system and VSR under different grid conditions.
 \end{itemize}
 \section{Thesis organization}
 This thesis is organized into five chapters, structured to provide a comprehensive analysis of the proposed control strategy for
-a three-phase active voltage source rectifier under unbalanced grid conditions. The content of each chapter is outlined as follows.\par
-The second chapter develops the comprehensive mathematical model of the three-phase Voltage Source Rectifier (VSR). It details the
+a Three-phase active voltage source rectifier under unbalanced grid conditions. The content of each chapter is outlined as follows.\par
+The second chapter develops the comprehensive mathematical model of the Three-phase Voltage Source Rectifier (VSR). It details the
 derivation of the voltage and current equations in the synchronous reference frame and introduces the method of Symmetrical Sequence
 Decomposition to analyze positive and negative sequence components. Furthermore, it analyzes the power flow equations to mathematically
 demonstrate how unbalanced grid voltages introduce second-order harmonic ripples in the DC-link voltage, which serves as the foundation
-for the control problem. Also describe the formulation and generation of space vector modulation PWM.\par
+for the control problem.The chapter also describes the formulation and implementation of Space Vector Pulse Width Modulation (SVPWM).\par
 Chapter three presents the core contribution of the thesis: the design of the proposed control architecture. It details the cascaded
 control structure, consisting of an inner-loop PI current controller for decoupling and regulating AC currents, and an outer-loop
 Model Predictive Controller (MPC) for DC-link voltage regulation. The chapter provides a step-by-step formulation of the MPC prediction model,
@@ -120,7 +119,7 @@ Additionally, the design of the Phase Locked Loop (PLL) for accurate synchroniza
 The fourth chapter validates the proposed control strategy through extensive simulations using MATLAB/Simulink. It outlines the system 
 and controller parameters and defines the specific test scenarios, including balanced grid conditions and various unbalanced fault types.
 The results are analyzed to evaluate the controller's ability to maintain DC voltage regulation, suppress harmonic ripples, and
-ensure unity power factor.\par
+ensure near unity power factor.\par
 The final chapter summarizes the key findings and contributions of this research. It draws conclusions regarding the effectiveness of the
 proposed MPC strategy in mitigating the adverse effects of grid unbalance. Finally, it suggests potential areas for future research and
 improvements to further enhance the performance and applicability of the control system.\par

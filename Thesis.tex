@@ -1,6 +1,9 @@
 \documentclass[11pt, a4paper]{report}
 \usepackage{mystyles}
-
+\usepackage{pdfpages} % Add this to your preamble
+\usepackage{titlesec}
+\titleformat{\chapter}[display]{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-35pt}{20pt}
 \addbibresource{tex/bibliography.bib} %Import the bibliography file
 
 \begin{document}
@@ -11,8 +14,8 @@
         \includegraphics[scale=0.35]{img/logo}
     \end{figure}
     \vspace{1.5cm}
-    \LARGE{\textbf{Model predictive control of active voltage source rectifier's output voltage 
-    under unbalanced grid voltage conditions}}\\
+    \LARGE{\textbf{“Model Predictive Control-Based DC-Link Voltage Regulation of a
+    Three-PhaseActive Voltage Source Rectifier Under Unbalanced Grid Voltage Conditions”}}\\
     \vspace{1.5cm}
     \Large{\textbf{Mekelle University\\
             Ethiopian Institute of Technology-Mekelle (EiT-M)\\

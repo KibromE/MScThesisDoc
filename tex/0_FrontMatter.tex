@@ -1,43 +1,21 @@
 %\addcontentsline{toc}{section}{Examiner Approval Sheet}
-\section*{Examiner Approval Sheet}
-We, the undersigned members of the Board of Examiners of the final open defense by Kibrom
-Esayas, have read and evaluated his thesis entitled \textbf{“Model predictive control of active
-voltage source rectifier's output voltage under unbalanced grid voltage conditions”},
-and examined the candidate. This is, therefore, to certify that the thesis has been accepted in
-partial fulfillment of the requirements for the degree.
-\begin{table}[H]
-    \centering
-    \def\arraystretch{1.5}
-    \begin{tabular}{lp{2.3in}p{1.5in}c}
-          & Approved by                  & Signature & Date          \\
-          &                              &           &               \\
-        1 & Gebremicheal Te-ame(Dr.-Ing) & \underline{\hspace{1.5in}}          & \underline{\hspace{1in}} \\
-          & Advisor                      &           &               \\
-        2 & \underline{\hspace{1.5in}}   & \underline{\hspace{1.5in}}          & \underline{\hspace{1in}} \\
-          & Internal Examiner            &           &               \\
-        3 & \underline{\hspace{1.5in}}   & \underline{\hspace{1.5in}}          & \underline{\hspace{1in}} \\
-          & External Examiner            &           &               \\
-        4 & \underline{\hspace{1.5in}}   & \underline{\hspace{1.5in}}          & \underline{\hspace{1in}} \\
-          & Chairperson, School Dean     &           &               \\
-        5 & \underline{\hspace{1.5in}}   & \underline{\hspace{1.5in}}          & \underline{\hspace{1in}} \\
-          & Chairperson, Department      &           &               \\
-    \end{tabular}
-\end{table}
+\clearpage % Force a clean break to start the external PDF on a fresh page
+\includepdf{img/KibromApprovalSheet.pdf}
 \thispagestyle{empty}
 \newpage
 \setcounter{page}{1}
 \chapter*{Declaration}
 \addcontentsline{toc}{chapter}{Declaration}
-I hereby declare that this MSc thesis entitled \textbf{“Model predictive control of active voltage
-source rectifier's output voltage under unbalanced grid voltage conditions”} is my
-original work and has not been presented for a degree in any other university, and all sources of
-material used for this thesis have been duly acknowledged.\par
+I hereby declare that this MSc thesis entitled \textbf{“Model Predictive Control-Based DC-Link
+Voltage Regulation of a Three-PhaseActive Voltage Source Rectifier Under Unbalanced Grid Voltage
+Conditions”} is my original work and has not been presented for a degree in any other university,
+and all sources of material used for this thesis have been duly acknowledged.\par
 \begin{table}[H]
     \centering
     \def\arraystretch{2}
     \begin{tabular}{p{2.3in}p{1.8in}c}
         Submitted by  & Signature & Date          \\
-        Kibrom Esayas & \underline{\hspace{1.5in}}          & \underline{\hspace{1.5in}}
+        Kibrom Esayas & \underline{\includegraphics[width=0.8\linewidth]{img/signature.JPG}}        & \underline{24/06/2026}
     \end{tabular}
 \end{table}
 \begin{table}[H]
@@ -45,7 +23,7 @@ material used for this thesis have been duly acknowledged.\par
     \def\arraystretch{2}
     \begin{tabular}{p{2.3in}p{1.8in}c}
         Advisor & Signature & Date\\
-        Gebremicheal Te-ame(Dr.-Ing)  &\underline{\hspace{1.5in}} & \underline{\hspace{1.5in}} \\
+        Gebremicheal Te-ame(Dr.-Ing)  &\underline{\includegraphics[width=0.8\linewidth]{img/advisor_signature.JPG}} & \underline{24/06/2026} \\
     \end{tabular}
 \end{table}
 
@@ -66,21 +44,21 @@ directly or indirectly, contributed to the successful completion of this thesis.
 \newpage
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
-This thesis presents a Model Predictive Control (MPC) strategy for a three-phase Active Voltage Source Rectifier (VSR)
+This thesis presents a Model Predictive Control (MPC) strategy for a Three-phase Active Voltage Source Rectifier (VSR)
 operating under unbalanced grid conditions. Conventional control methods often struggle to maintain 
 power quality during grid faults, leading to significant DC-link voltage ripples and harmonic distortion in the input
 currents. To address these challenges, this research develops a robust control framework that integrates a mathematical
 model of the VSR based on symmetrical sequence decomposition.\par
-The proposed system utilizes a cascaded control structure, employing an outer-loop MPC to regulate the DC-link energy
+The proposed control architecture employs a cascaded structure, employing an outer-loop MPC to regulate the DC-link energy
 and an inner-loop PI controller for precise current tracking. A discrete-time prediction model is
 derived to forecast the future behavior of the positive and negative sequence components. A specialized cost function
 is designed to generate optimal control references, specifically targeting the suppression of second-order
-power oscillations of the fundamental frequnecy and the mitigation of negative-sequence currents.\par
+power oscillations of the fundamental frequency and the mitigation of negative-sequence currents.\par
 The performance of the proposed controller is validated through extensive simulations in the MATLAB/Simulink environment
 for both linear and nonlinear switching models. Test scenarios include balanced grid conditions and various unbalanced
 fault types. The results demonstrate that the proposed MPC strategy achieves DC-link voltage regulation and
-reduced harmonic distortion compared to classical control methods, effectively ensuring unity power factor and stable
-operation even under grid unbalance.\par
+reduced harmonic distortion compared to conventional control methods, effectively ensuring unity power factor and stable
+operation even under unbalanced grid conditions.\par
 \bigskip
 
 \textbf{Keywords: \textit{Model Predictive Control (MPC), Active Rectifier, Voltage Source Rectifier (VSR),

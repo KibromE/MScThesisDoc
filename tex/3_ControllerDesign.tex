@@ -7,7 +7,7 @@
     \label{fig:controllerStructure}
 \end{figure}
 The control system adopts a cascaded loop structure to separate the fast dynamics of the grid currents
-from the slower dynamics of the DC link capacitor energy. Inner Loop (Current Control): A high-bandwidth
+from the slower dynamics of the DC-link capacitor energy. Inner Loop (Current Control): A high-bandwidth
 PI controller operating at the switching frequency ($f_{sw} = 20 \text{ kHz}$, $T_{inner} = 50 \mu\text{s}$)
 regulates the AC currents to track references.Outer Loop (MPC): A Model Predictive Controller operates at
 a lower sampling rate ($f_{dc} = 2 \text{ kHz}$, $T_{dc} = 500 \mu\text{s}$) to generate optimal current references
@@ -153,13 +153,13 @@ Once the PI controller gains are determined, they can be implemented in the clos
 \end{equation}
 The bandwidth of the current controller is chosen to be at least ten times smaller than the
 switching frequency of the inverter to ensure that the controller can respond quickly enough to
-changes in the reference current.
+changes in the reference current\cite{artWangMPC}.
 \begin{equation}
     \tau_c = \frac{10}{2 \pi f_{s}}
     \label{eq:time_constant_bandwidth}
 \end{equation}
 \section{DC Voltage MPC Controller}
-The Model Predictive Controller (MPC) is designed to regulate the DC link voltage of the VSR under unbalanced grid conditions.
+The Model Predictive Controller (MPC) is designed to regulate the DC-link voltage of the VSR under unbalanced grid conditions.
 \begin{figure}[ht]
     \centering
     \includegraphics[scale=0.6]{img/MPCPrediction&ControlHW.png}
@@ -169,15 +169,15 @@ The Model Predictive Controller (MPC) is designed to regulate the DC link voltag
 The DC voltage controller is formulated to  balance computational efficiency with control stability, the MPC design decouples
 the Prediction Horizon ($N_p$) from the Control Horizon ($N_c$). As illustrated in Figure \ref{fig:MPC_Horizons}:
 \begin{itemize}
-    \item \textbf{Prediction Horizon} ($N_p$): The window over which the controller evaluates the state trajectory (DC Link Energy and actual currents).
+    \item \textbf{Prediction Horizon} ($N_p$): The window over which the controller evaluates the state trajectory (DC-Link Energy and actual currents).
           A longer $N_p$ ensures stability by allowing the controller to foresee the long-term integration of energy.
     \item \textbf{Control Horizon} ($N_c$): The number of future control moves the optimizer is free to vary. Beyond $N_c$,
           the control input is constrained to remain constant.
 \end{itemize}
 Eventhough selecting \textbf{Blocked Horizon}($N_c < N_p$) is preferable for computational efficiency, it has a trade-off with tuning,
 control performance and stability. So for high bandwidth control system it is preferred to use \textbf{Full Horizon}($N_c = N_p = N$).\par
-The DC voltage controller is designed to regulate the DC link voltage of the VSR to a desired reference value.
-The central objective is to regulate the DC link energy ($W = v_{dc}^2$) rather than the voltage directly,
+The DC voltage controller is designed to regulate the DC-link voltage of the VSR to a desired reference value.
+The central objective is to regulate the DC-link energy ($W = v_{dc}^2$) rather than the voltage directly,
 as this linearizes the relationship between power and the state variable as shown in equation (\ref{eq:dc_link_dynamics}).\par
 \subsection{Prediction Model}
 Discretizing equation (\ref{eq:dc_link_dynamics}) using the Forward Euler method with sampling time $T_s$ of the DC control
@@ -202,7 +202,7 @@ The instantaneous power components—Average Real Power ($P_0$), Average Reactiv
 Here, $\mathbf{G}(k)$ is a $4 \times 4$ time-varying matrix dependent on the measured grid voltages $e_{dq}^p$ and $e_{dq}^n$ drived in
 equation (\ref{eq:power_coefficients}).
 \begin{itemize}
-    \item Row 1 ($P_0$): Drives the DC link energy state $W$.
+    \item Row 1 ($P_0$): Drives the DC-link energy state $W$.
     \item Row 2-4 ($Q_0, P_{c2}, P_{s2}$): Auxiliary outputs to be minimized (Regulation Objectives).
 \end{itemize}
 The decision vector of unknown control inputs, $\mathbf{U}$, is:
@@ -261,7 +261,7 @@ Where:
 \begin{itemize}
     \item $\lambda_1$: Prioritizes DC voltage tracking stiffness.
     \item $\lambda_2, \lambda_3$: Penalizes reactive power and power ripples. High values here force the controller to use
-          Negative Sequence currents to cancel oscillations actively.
+          Negative-sequence currents to cancel oscillations actively.
     \item $\mathbf{R}$: A regularization matrix to smooth the control action and prevent numerical ill-conditioning.
 \end{itemize}
 The \textbf{Energy Tracking} term runs up to $N_p$, ensuring that the controller predicts the long-term consequence of its actions.
@@ -391,7 +391,7 @@ The PLL structure used in this work is illustrated in Figure \ref{fig:PLLstructu
     \caption{Block diagram of the PLL structure \cite{sanjuan2010voltage}}
     \label{fig:PLLstructure}
 \end{figure}
-The PLL takes the three-phase grid voltages as input, which are first transformed into the $\alpha-\beta$
+The PLL takes the Three-phase grid voltages as input, which are first transformed into the $\alpha-\beta$
 stationary reference frame using the Clarke transformation. The $\alpha-\beta$ voltages are then converted
 into the $d-q$ synchronous reference frame using the Park transformation, which requires an initial estimate
 of the grid voltage angle $\theta$. The q-axis voltage component $v_{q}$ is used as the error signal for the PLL,
@@ -399,7 +399,7 @@ which is processed by a PI controller to adjust the estimated angle $\theta$.\pa
 The PLL is designed to minimize the q-axis voltage component $v_{q}$, which ideally should be zero when the estimated
 angle $\theta$ matches the actual grid voltage angle. The PI controller in the PLL adjusts the estimated angle based on
 the error signal, ensuring that the PLL can track changes in the grid voltage angle and frequency accurately.\par
-The PLL is designed to according \cite{sanjuan2010voltage,PLL7467498} and the mathematical model of the PLL can be expressed as:
+The PLL is designed to according \cite{PLLWang2019,sanjuan2010voltage,PLL7467498} and the mathematical model of the PLL can be expressed as:
 \begin{equation}
     \begin{split}
         \dot{\omega}  &= \gamma_1 \varepsilon\\
@@ -449,7 +449,7 @@ with the q-axis voltage component $v_q$ converging to zero and the estimated ang
     \caption{PLL simulation in balanced grid condition (II)}
     \label{fig:balanced_PLL}
 \end{figure}
-Under unbalanced grid conditions, the PLL is still able to accurately estimate the grid voltage angle, by tracking the positive sequence component
+Under unbalanced grid conditions, the PLL is still able to accurately estimate the grid voltage angle, by tracking the Positive-sequence component
 of the grid voltage. The q-axis voltage component $v_q$ converges to zero, and the estimated angle $\theta$ tracks the actual grid voltage angle closely,
 as shown in Figure \ref{subfig:c angle estimation unbal}.\par
 \begin{figure}[!b]
@@ -463,7 +463,7 @@ as shown in Figure \ref{subfig:c angle estimation unbal}.\par
 \end{figure}
 \begin{figure}[ht]\ContinuedFloat
     \centering
-        \subfloat[positive sequence voltage in $\alpha-\beta$ frame]{
+        \subfloat[Positive-sequence voltage in $\alpha-\beta$ frame]{
         \includegraphics[width=0.9\linewidth]{img/PLL_unbalanced_voltage_alphabeta_pos.png}
         \label{subfig:b voltage input positive alphabeta}
     }

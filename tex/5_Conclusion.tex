@@ -3,17 +3,17 @@
 As active voltage source rectifiers (VSRs) become increasingly critical in modern power applications—such
 as EV charging stations and renewable energy integration—their reliability under non-ideal grid conditions
 is of paramount importance. This thesis investigated the adverse effects of unbalanced grid voltages, which
-inherently generate negative-sequence currents and induce detrimental 100-Hz power oscillations on the DC-link.\par
+inherently generate Negative-sequence currents and induce detrimental 100-Hz power oscillations on the DC-link.\par
 The core contribution of this research lies in the integration of Symmetrical Component Extraction with an
-Model Predictive Control (MPC) algorithm. By mapping the coupled three-phase system into decoupled
-positive and negative sequence networks, an approximate discrete-time prediction model was formulated.
+Model Predictive Control (MPC) algorithm. By mapping the coupled Three-phase system into decoupled
+Positive-sequence and Negative-sequence networks, an approximate discrete-time prediction model was formulated.
 The controller was designed to regulate the square of the DC-link voltage (energy) by solving a multi-objective
 cost function, which also simultaneously enforce unity power factor, and suppress second-order active and
 reactive power ripples.\par
 The effectiveness of the proposed architecture was rigorously tested against realistic grid fault scenario
 (Math Bollen's Type B, F, and G sags) using both linear mathematical model and nonlinear switching model in
 Simulink. The simulation results conclusively demonstrated that the proposed controller heavily attenuates
-the negative-sequence currents and stabilizes the DC output. But also due to the ideal integrator prediction
+the Negative-sequence currents and stabilizes the DC output. But also due to the ideal integrator prediction
 model used in the MPC algorithm, the MPC controller doesn't account for the delay in inner current controller.
 as the result of this it can be observed that an overshoot and small residual oscillations is introduced in
 the step response.\par
